@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>type</title>
+</head>
+<body>
+    <script>
+        /* 
+            Number函数，转换成数值
+         */
+        console.log(Number(324)); // 324
+        // 如果可以直接被解析为数值，则转换为相应的数值，否则得到NaN，空字符串转为0
+        console.log(Number('324')) // 324
+        console.log(Number('324abc')) // NaN
+        console.log(Number('')) // 0
+        
+        // true 转换为1，false转换为0
+        console.log(Number(false)) // 0
+        console.log(Number(true)) // 1
+        
+        // undefined 转为 NaN
+        console.log(Number(undefined)) // NaN
+
+        // null 转为 0
+        console.log(Number(null)) // 0
+        
+        // 对象转换
+        var a = {a: 1}
+        a.valueOf() // {a : 1}
+        a.toString() // '[object object]'
+        console.log(Number({a : 1})) // NaN 等价于console.log(Number(''[object object]'))
+        
+
+        console.log('==============')
+        /* 
+            String函数
+         */
+        //  数值：转为相应字符串
+        console.log(String(123)) // '123'
+        // 字符串：还是原来的值
+        console.log(String('abc')) // 'abc'
+        // 布尔值: true转为`"true"`,false转为`"false"`
+        console.log(String(true)) // 'true'
+        // undefined：转为 `"undefined"`
+        console.log(String(undefined)) // 'undefined'
+        // null: 转为 `"null"`
+        console.log(String(null)) // 'null'
+        // 对象
+        var b = {
+            a: 1,
+            toString: function () {  
+                return {
+                    b: 2,
+                }
+            },
+            valueOf: function () {  
+                return 'b'
+            }
+        }
+        console.log('b', String(b)) // b b
+
+
+        console.log('=============');
+        /* 
+            Boolean函数
+         */
+        console.log(Boolean(undefined)) // false
+        console.log(Boolean(null)) // false
+        console.log(Boolean(0)) // false
+        console.log(Boolean(NaN)) // false
+        console.log(Boolean('')) // false
+
+        // 空对象
+        console.log(Boolean({})) // true        
+
+        /* 
+            常见题目
+         */
+        console.log('常见题目');
+        console.log([] + []);
+        console.log([] + {});
+        console.log({} + []);
+        console.log({} + {});
+        console.log(true + true);
+        console.log(1 + {a: 1});
+        
+    </script>
+</body>
+</html>

@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>layout</title>
+    <style>
+        * {
+            padding: 0;
+            margin: 0;
+        }
+        .layout article div {
+            min-height: 100px;
+        }
+        .layout {
+            margin-top: 20px;
+        }
+
+        /* 浮动方案 */
+        .layout.float .left {
+            float: left;
+            width: 300px;
+            background-color: red;
+        }
+        .layout.float .right {
+            float: right;
+            width: 300px;
+            background: blue;
+        }
+        .layout.float .center {
+            background-color: yellow;
+        }
+
+        /* 绝对定位 */
+        .layout.absolute .left-right-center>div {
+            position: absolute;
+        }
+        .layout.absolute .left {
+            left: 0;
+            width: 300px;
+            background-color: red;
+        }
+        .layout.absolute .center {
+            left: 300px;
+            right: 300px;
+            background-color: teal;
+        }
+        .layout.absolute .right {
+            right: 0;
+            background-color: aquamarine;
+            width: 300px;
+        }
+
+        /* flex */
+        .layout.flex {
+            margin-top: 150px;
+        }
+        .layout.flex .left-right-center {
+            display: flex;
+        }
+        .layout.flex .left {
+            width: 300px;
+            background-color: red;
+        }
+        .layout.flex .right {
+            width: 300px;
+            background-color: blanchedalmond;
+        }
+        .layout.flex .center {
+            flex: 1;
+            background-color: aqua;
+        }
+
+        /* table-cell */
+        .layout.table-cell .left-right-center {
+            width: 100%;
+            display: table;
+            height: 100px;
+        }
+        .layout.table-cell .left-right-center>div {
+            display: table-cell;
+        }
+        .layout.table-cell .left {
+            width: 300px;
+            background-color: red;
+        }
+        .layout.table-cell .center {
+            background-color: aqua;
+        }
+        .layout.table-cell .right {
+            width: 300px;
+            background-color: aquamarine;
+        }
+
+        /* Grid */
+        .layout.grid .left-right-center {
+            display: grid;
+            width: 100%;
+            grid-template-areas: 100px;
+            grid-template-columns: 300px auto 300px;
+        }
+        .layout.grid .left {
+            background-color: red;
+        }
+        .layout.grid .center {
+            background-color: aqua;
+        }
+        .layout.grid .right {
+            background-color: green;
+        }
+    </style>
+</head>
+<body>
+    <section class="layout float">
+        <article class="left-right-center">
+            <div class="left"></div>
+            <div class="right"></div>
+            <div class="center">
+                浮动解决三栏布局
+            </div>
+        </article>
+    </section>
+
+    <section class="layout absolute">
+        <article class="left-right-center">
+            <div class="left"></div>
+            <div class="center">
+                绝对定位解决三栏布局
+            </div>
+            <div class="right"></div>
+        </article>
+    </section>
+
+    <section class="layout flex">
+        <article class="left-right-center">
+            <div class="left"></div>
+            <div class="center">
+                flex解决三栏布局
+            </div>
+            <div class="right"></div>
+        </article>
+    </section>
+
+    <section class="layout table-cell">
+        <article class="left-right-center">
+            <div class="left"></div>
+            <div class="center">
+                table-cell解决三栏布局
+            </div>
+            <div class="right"></div>
+        </article>
+    </section>
+
+    <section class="layout grid">
+        <article class="left-right-center">
+            <div class="left"></div>
+            <div class="center">
+                Grid解决三栏布局
+            </div>
+            <div class="right"></div>
+        </article>
+    </section>
+</body>
+</html>
