@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>AJAX</title>
+</head>
+<body>
+    <script>
+        /* 
+            原生js实现ajax异步请求
+        */
+        // 创建ajax对象
+        var xhr = null;
+        if(window.XMLHttpRequest) {
+            xhr = new XMLHttpRequest();
+        } else {
+            xhr = new ActiveXObject('Microsoft.XMLTTP');
+        }
+
+        // 连接服务器
+        xhr.open('GET', 'www.baidu.com', true)
+
+        // 发送请求
+        xhr.send();
+
+        // 处理返回数据
+        xhr.onreadystatechange = function () {
+            if(xhr.readyState === 4) {
+                if(xhr.status === 200 || xhr.status === 304) {
+                    success(xhr.responseText);
+                } else {
+                    if(failed) {
+                        failed(xhr.status);
+                    }
+                }
+            }
+        }
+    </script>
+</body>
+</html>
