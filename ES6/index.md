@@ -707,3 +707,41 @@ wm2.get(k2) // "bar"
 ## 9. Proxy
 
 Proxy 用于修改某些操作的默认行为，等同于在语言层面做出修改，所以属于一种“元编程”（meta programming），即对编程语言进行编程。 第一个参数代表目标对象，第二个参数代表拦截的方法
+
+## 10.Reflect
+
+
+
+## 11. Promise
+
+用同步的方式书写异步代码。
+
+```javascript
+let p = new Promise( function(resolve, reject) {
+    // 异步代码
+    // resolve == 成功
+    // reject == 失败
+})
+
+let p2 = new Promise( function(resolve, reject) {
+    // 异步代码
+    // resolve == 成功
+    // reject == 失败
+})
+
+p.then( function() { 
+    // 成功执行代码
+}, function() {
+    // 失败执行代码
+})
+
+Promise.all([
+    p, p2
+]).then(function(arr) {
+    let [res1, res2] = arr; // 解构赋值
+    // 全都成功了
+}, function() {
+    // 至少一个失败了
+})
+```
+
