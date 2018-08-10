@@ -329,4 +329,3 @@ for (const item of iterator3) {
 // [1, "b"]
 // [2, "c"]
 ```
-

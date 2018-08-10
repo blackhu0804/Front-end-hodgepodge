@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+</head>
+<body>
+    <script>
+        /* 
+            一、Math.random()
+            采用插入排序，随机不完全
+        */
+        let number = [1, 2, 3, 4, 5]
+        number.sort( () => {
+            return Math.random() - 0.5;
+        })
+        console.log(number)
+
+        /* 
+            二、Fisher–Yates
+        */
+        let arr = [1, 2, 3, 4, 5]
+        function shuffle(arr) {
+            let x;
+            for(let i = arr.length; i; i--) {
+                let j = Math.floor( Math.random() * i);
+                x = arr[i-1];
+                arr[i-1] = arr[j];
+                arr[j] = x;               
+            }
+            return arr;
+        }
+        console.log(shuffle(arr));
+    </script>    
+</body>
+</html>

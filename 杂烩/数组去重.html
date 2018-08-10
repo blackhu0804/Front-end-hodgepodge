@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+</head>
+<body>
+    <script>
+        /* 
+            数组去重
+            缺点：对象和NaN不去重
+        */
+        let arr = [1, 1, 1, 3, 4, 6, 3]
+        function unique(arr) {
+            let newArr = [];
+            for (let i = 0; i < arr.length; i++) {
+                if (newArr.indexOf(arr[i]) === -1) {
+                    newArr.push(arr[i]);
+                }
+            }
+            return newArr;
+        }
+
+        let newArr = unique(arr)
+        console.log(newArr)    //  [1, 3, 4, 6]
+
+        /* 
+            方法2  Reduce 
+            缺点：对象和NaN不去重
+            */
+        function unique2(arr) {
+            return arr.reduce( (prev, next) => {
+                if(prev.indexOf(next) === -1) {
+                    prev.push(next)
+                }
+                return prev
+            },[])
+        }
+        let newArr2 = unique2(arr)
+        console.log(newArr2) // [1, 3, 4, 6]
+
+
+        /* 
+            方法3 排序去重 
+            缺点：对象和NaN不去重， '1'和1也不去重
+            */
+        function unique3(arr) {
+            let newArr3 = [arr[0]];
+            let item;
+            arr.sort( (a, b) => {
+                return a - b;
+            })
+            for(let i = 1;i < arr.length; i++) {
+                item = arr[i];
+                if(item !== arr[i - 1]){
+                    newArr3.push(item);
+                }
+            }
+            return newArr3;
+        }
+        let newArr3 = unique3(arr);
+        console.log(newArr3); // [1, 3, 4, 6]
+
+        /* 
+            方法4 ES6
+            对象不去重 NaN 去重
+            */
+        function unique4(arr) {
+            return [...new Set(arr)];
+            // 或者
+            // return Array.from(new Set(arr));
+        }
+        let newArr4 = unique4(arr)
+        console.log(newArr4) // [1, 3, 4, 6]
+
+        /* 
+            方法5 filter + indexOf 
+            对象不去重 NaN 会被忽略掉
+        */
+        function unique5(arr) {
+            let newArr5 = arr.filter( (item, index, arr) => {
+                console.log(arr.indexOf(item))
+                return arr.indexOf(item) === index;
+            })
+            return newArr5;
+        }
+        let newArr5 = unique5(arr);
+        console.log(newArr5) // [1, 3, 4, 6]
+
+
+        /* 
+            方法6 Object键值对
+            对象不去重 
+        */
+        let array = [1, 2, 1, 1, '1']
+        function unique6(array) {
+           let obj = {}
+           return array.filter( (item, index, array) => {
+               console.log(typeof item + item)
+               return obj.hasOwnProperty(typeof item + item) ? false : obj[typeof item + item] = true
+           }) 
+        }
+        let newArr6 = unique6(array)
+        console.log(newArr6) // [1, 2, "1"]
+
+
+        /* 
+            方法7 优化Object
+            全部去重
+        */
+        var array2 = [{value: 1}, {value: 1}, {value: 2}];
+
+        function unique(array) {
+            var obj = {};
+            return array.filter(function(item, index, array){
+                console.log(typeof item + JSON.stringify(item))
+                return obj.hasOwnProperty(typeof item + JSON.stringify(item)) ? false : (obj[typeof item + JSON.stringify(item)] = true)
+            })
+        }
+
+        console.log(unique(array2)); // [{value: 1}, {value: 2}]
+    </script>
+</body>
+</html>
