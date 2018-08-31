@@ -1,0 +1,70 @@
+<script>
+    /*class Promise {
+        constructor() {
+            this.callbacks = []
+        }
+
+        then(onsuccess, onfail) {
+            this.callbacks.push({
+                resolve: onsuccess,
+                reject: onfail
+            })
+            return this
+        }
+
+        resolve(result) {
+            this.complete('resolve', result)
+        }
+
+        reject(result) {
+            this.complete('reject', result)
+        }
+
+        complete(type, result) {
+            let obj = this.callbacks.shift()
+            obj[type](result)
+        }
+    }*/
+
+    function myPromise(fn) {
+        let self = this
+        self.value = null // 成功时的值
+        self.error = null // 失败的原因
+        self.onFulfilled = null // 成功的回调
+        self.onRejected = null // 失败的回调
+
+        function resolve(value) {
+            self.value = value
+            self.onFulfilled(self.value)
+        }
+
+        function reject(error) {
+            self.error = error
+            self.onRejected(self.error)
+        }
+
+        fn(resolve, reject)
+    }
+
+    myPromise.prototype.then = function(onFulfilled, onRejected) {
+        this.onFulfilled = onFulfilled
+        this.onRejected = onRejected
+    };
+
+    var p = new myPromise( (resolve, reject) => {
+        setTimeout( () => {
+            console.log('1')
+            resolve('resolved')
+        }, 1000)
+    })
+
+    function resolve(value) {
+        console.log(value)
+    }
+
+    function reject(error) {
+        console.log(error)
+    }
+
+    p.then(resolve, reject)
+</script>
