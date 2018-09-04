@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title>单体模式</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+</head>
+<body>
+    <button id="btn">弹窗</button>
+    <script>
+/*
+* @Author: blackhu 
+* @Date: 2018-09-04 10:02:01 
+ * @Last Modified by: blackhu
+ * @Last Modified time: 2018-09-04 10:27:31
+* 
+* 单体模式提供了一种将代码组织为一个逻辑单元的手段，这个逻辑单元中的代码可以通过单一变量进行访问
+* 优点:
+* 1. 划分命名空间，减少全局变量的数量
+* 2. 使代码组织的更为一致，让代码容易阅读和维护
+* 3. 可以被实例化，且实例化一次
+*/
+
+        // 单体模式
+        var singleton = function (name) {
+            this.name = name;
+            this.instance = null;
+        };
+        singleton.prototype.getName = function () {
+            return this.name;
+        }
+        // 获取实例对象
+        function getInstance(name) {
+            if (!this.instance) {
+                this.instance = new singleton(name);
+            }
+            return this.instance;
+        }
+        // 测试单体模式的实例
+        var a = getInstance('aa') // singleton {name: "aa", instance: null}
+        var b = getInstance('bb') // singleton {name: "aa", instance: null}
+        // 因为单体模式是只实例化一次，所以下面的实例是相等的
+        console.log(a === b) // true
+
+
+        /*
+            单体模式实现弹窗
+        */
+        var createWindow = (function () {
+            var div;
+            return function () {
+                if (!div) {
+                    div = document.createElement('div');
+                    div.innerHTML = '我是弹窗';
+                    div.style.display = 'none';
+                    document.body.appendChild(div);
+                }
+                return div
+            }
+        })()
+
+        document.getElementById('btn').onclick = function (params) {
+            // 点击后先创建一个div元素
+            var win = createWindow();
+            win.style.display = 'block';
+        }
+    </script>
+
+</body>
+</html>

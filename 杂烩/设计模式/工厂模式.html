@@ -1,0 +1,30 @@
+<script>
+/*
+ * @Author: blackhu 
+ * @Date: 2018-09-04 09:56:14 
+ * @Last Modified by: blackhu
+ * @Last Modified time: 2018-09-04 10:32:03
+ * 
+ * 工厂模式是为了解决多个类似对象声明的问题;也就是为了解决实列化对象产生重复的问题。
+ * 优点：解决多个相似的问题
+ * 缺点：对象的类型不知道
+*/
+    
+    function CreatePerson(name, age) {
+        var obj = new Object();
+        obj.name = name;
+        obj.age = age;
+        return obj;
+    }
+
+    var p1 = new CreatePerson('black', 18);
+    var p2 = new CreatePerson('guyue', 20);
+
+    console.log(p1); // {name: "black", age: 18}
+    console.log(p2); // {name: "guyue", age: 20}
+    
+    // 返回都是object 无法识别对象的类型 不知道他们是哪个对象的实列
+    console.log(typeof p1);  // object
+    console.log(typeof p2);  // object
+    console.log(p1 instanceof Object); // true
+</script>

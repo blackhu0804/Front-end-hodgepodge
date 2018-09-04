@@ -1,0 +1,30 @@
+<script>
+/*
+ * @Author: blackhu 
+ * @Date: 2018-09-04 15:00:13 
+ * @Last Modified by: blackhu
+ * @Last Modified time: 2018-09-04 15:20:08
+ */
+var obj = {} // 定义发布者
+obj.list = [] // 缓存列表 存放订阅者回调函数
+
+// 增加订阅者
+obj.listen = function(fn) {
+    obj.list.push(fn) // 订阅消息添加到缓存列表
+}
+
+// 发布消息
+obj.trigger = function () {
+    for(var i = 0,fn;fn = this.list[i++];) {
+        fn.apply(this, arguments)
+    }
+}
+
+// 订阅消息
+obj.listen(function (color, size) {
+    console.log("颜色是："+color)
+    console.log("尺码是："+size)
+})
+
+obj.trigger('red',43)
+</script>

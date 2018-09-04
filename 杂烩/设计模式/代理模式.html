@@ -1,0 +1,35 @@
+<script>
+/*
+ * @Author: blackhu 
+ * @Date: 2018-09-04 10:50:47 
+ * @Last Modified by: blackhu
+ * @Last Modified time: 2018-09-04 11:04:30
+ * 代理模式最基本的形式是对访问进行控制，而本体对象则负责执行所分派的那个对象的函数或者类，
+ * 简单的来讲本地对象注重的去执行页面上的代码，代理则控制本地对象何时被实例化，何时被使用；
+ */
+
+// 比如东哥送奶茶妹一个礼物，让经纪人去送
+var Girl = function (name) {
+    this.name = name;
+}
+
+var Boy = function (girl) {
+    this.girl = girl;
+    // 送礼物
+    this.sendGift = function (gift) {
+        console.log("Hi " + this.girl.name + ", 东哥送你一个礼物：" + gift)
+    }
+}
+// 让经纪人去送礼物
+var ProxyObj = function (girl) {
+    this.girl = girl;
+    this.send = function (gift) {
+        // 重点来了
+        // 代理模式负责本体对象实例化
+        (new Boy(this.girl)).sendGift(gift);
+    }
+}
+// 初始化
+var proxy = new ProxyObj(new Girl('奶茶妹'))
+proxy.send('钻戒')
+</script>

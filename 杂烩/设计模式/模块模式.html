@@ -1,0 +1,30 @@
+<script>
+/*
+ * @Author: blackhu 
+ * @Date: 2018-09-04 10:32:26 
+ * @Last Modified by: blackhu
+ * @Last Modified time: 2018-09-04 10:49:05
+ * 
+ * 模块模式的思路是为单体模式添加私有变量和私有方法能够减少全局变量的使用；
+ * 在这个匿名函数内部，先定义了私有变量和函数，供内部函数使用，
+ * 然后将一个对象字面量作为函数的值返回，返回的对象字面量中只包含可以公开的属性和方法。
+ * 这样的话，可以提供外部使用该方法；由于该返回对象中的公有方法是在匿名函数内部定义的，
+ * 因此它可以访问内部的私有变量和函数。
+ */
+
+var singleMode = (function() {
+    // 创建私有变量
+    var num = 112;
+    // 创建私有函数
+    function func() {
+        console.log(num)
+    }
+    // 返回一个对象包含的公有属性和方法
+    return {
+        num: num,
+        func: func
+    };
+})()
+
+singleMode.func()
+</script>
