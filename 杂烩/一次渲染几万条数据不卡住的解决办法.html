@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>大量数据加载和花样打印</title>
+</head>
+
+<body>
+    <div class="box">
+        box
+        <div id="create"></div>
+        <ul id="ulBox"></ul>
+    </div>
+</body>
+<script>
+    (function () {
+        const ul = document.getElementById('ulBox')
+        if (!ul) {
+            return
+        }
+
+        const total = 10000;
+        const once = 20;
+        const number = total / once;
+        var areadyNum = 0;
+        const array = new Array(100000) //存放将要渲染的列表数据
+        for (var i = 0; i < array.length; i++) {
+            array[i] = i;
+        }
+
+        function addItem() {
+            //        创建一个虚拟节点占位
+            const fragment = document.createDocumentFragment();
+
+            for (var i = 0; i < once; i++) {
+                const li = document.createElement("li")
+                li.innerText = array[areadyNum * once + i + 1]
+                fragment.appendChild(li);
+            }
+            ul.appendChild(fragment)
+            continueDo();
+            areadyNum++;
+        }
+
+        function continueDo() {
+            if (areadyNum < number) {
+                window.requestAnimationFrame(addItem);
+            }
+        }
+
+        continueDo();
+
+        //        点击列表项
+        ul.addEventListener('click', function (e) {
+            if (e.target.tagName === "LI") {
+                alert(e.target.innerText)
+            }
+        })
+    })()
+</script>
+
+</html>
