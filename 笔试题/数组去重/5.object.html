@@ -1,0 +1,25 @@
+<script type="text/javascript">
+	/*
+		5. Object
+	*/
+	var a = [3, '3', 62, 3, 38, 20, 42, 14, 5, 38, 29, 42];
+	function uniqueArray(arr) {
+		var obj = {}
+		return arr.filter( (item, index, arr) => {
+			return obj.hasOwnProperty(item) ? false : obj[item] = true
+		})
+	}
+
+	console.log(uniqueArray(a)) // [3, 62, 38, 20, 42, 14, 5, 29]
+
+
+	//  3 和 '3' 是不同的，但是这种方法会判断为同一个值,因为对象的键值只能是字符串，所以我们可以使用 typeof item + item 拼成字符串作为 key 值来避免这个问题：
+	function uniqueArray2(arr) {
+		var obj = {}
+		return arr.filter( (item, index, arr) => {
+			return obj.hasOwnProperty(typeof item + item) ? false : obj[typeof item + item] = true
+		})
+	}
+
+	console.log(uniqueArray2(a)) // [3, "3", 62, 38, 20, 42, 14, 5, 29]
+</script>

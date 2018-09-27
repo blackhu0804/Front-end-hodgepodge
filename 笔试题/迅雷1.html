@@ -1,0 +1,47 @@
+<script>
+    function EventEmitter() {
+        this.events = {};
+    }
+    EventEmitter.prototype.on = function (type, listener) {
+        if (this.events[type]) {
+            this.events[type].push(listener);
+        } else {
+            this.events[type] = [listener];
+        }
+        console.log(this.events[type].toString())
+    }
+
+    EventEmitter.prototype.emit = function (type, ...rest) {
+        let callbacks = this.events[type];
+        if (callbacks.length > 0) {
+            callbacks.forEach((callback) => {
+                callback(...rest);
+            });
+        }
+    }
+    EventEmitter.prototype.once = function (type, ...rest) {
+        let callbacks = this.events[type];
+        if (callbacks.length > 0) {
+            callbacks.forEach((callback) => {
+                callback(...rest);
+            });
+        }
+        this.removeListener(type, this.events[type])
+    }
+
+    EventEmitter.prototype.removeListener = function (type, listener) {
+        if (this.events[type]) {
+            this.events[type] = this.events[type].filter(item => {
+                item != listener
+            });
+        }
+    }
+
+    var e = new EventEmitter();
+    var count = 0;
+    e.on('test', function (num1, num2) {
+        count = num1 + num2
+        return count
+    });
+    console.log(e.emit('test', 1, 2))
+</script>

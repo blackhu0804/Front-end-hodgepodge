@@ -1,0 +1,20 @@
+<script type="text/javascript">
+	/*
+		给定一个正整数N（N < 10）,找到长度为 2N 的所有二进制序列，使得二进制书中的前n位的和与最后n位的和相同
+	*/
+	let n = 4
+	let str = ''
+	var once = ''
+
+	function dfs(n, str) {
+		if(!n) {
+			once += str + str + " "
+			return 
+		}
+		dfs(n-1, str + '1')
+		dfs(n-1, str + '0')
+	}
+
+	dfs(n, str)
+	console.log(once)
+</script>

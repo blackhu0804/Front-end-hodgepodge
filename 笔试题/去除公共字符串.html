@@ -1,0 +1,22 @@
+<script type="text/javascript">
+	/*
+		删除公共字符
+		
+		输入两个字符串，从第一字符串中删除第二个字符串中所有的字符。例如，输入”They are students.”和”aeiou”，则删除之后的第一个字符串变成”Thy r stdnts.”
+	*/
+	function remove(str1, str2) {
+		let arr1 = str1.split('')
+		let arr2 = str2.split('')
+		let str = ''
+		for(let i = 0; i < arr1.length;i++){
+			for(let j = 0;j < arr2.length;j++){
+				if(arr1[i] === arr2[j]){
+					arr1[i] = ''
+					console.log(arr1)
+				}
+			}
+		}
+		return arr1.join('')
+	}
+	console.log(remove('They are students.','aeiou')) 
+</script>

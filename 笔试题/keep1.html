@@ -1,0 +1,21 @@
+<script type="text/javascript">
+	let str = "0,20 4,10 11,20 21,30"
+	let arr = str.split(' ')
+	let startArr = []
+	let endArr = []
+	arr.forEach( (item) => {
+		let a = item.split(',')
+		startArr.push(Number(a[0]))
+		endArr.push(Number(a[1]))
+	})
+
+	for(let i = 0;i < arr.length;i++){
+		if(i+1 === arr.length) {
+			console.log(true)
+		}
+		if(endArr[i] > startArr[i+1]){
+			console.log(false)
+			break
+		}
+	}
+</script>

@@ -1,0 +1,20 @@
+<script type="text/javascript">
+	/*
+		2.使用splice
+		优点：不需要使用额外的存储空间，空间复杂度为O(1)
+		缺点：需要频繁的内存移动，双重循环，时间复杂度为O(N2)
+	*/
+	var a = [3, 3, 62, 3, 38, 20, 42, 14, 5, 38, 29, 42];
+	function uniqueArray(arr) {
+		for(var i = 0; i < arr.length;i++) {
+			for(var j = i+1; j < arr.length; j++) {
+				if(arr[i] === arr[j]) {
+					arr.splice(j--, 1)
+				}
+			}
+		}
+		return arr
+	}
+
+	console.log(uniqueArray(a)) // [3, 62, 38, 20, 42, 14, 5, 29]
+</script>

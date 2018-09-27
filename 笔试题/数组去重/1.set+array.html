@@ -1,0 +1,13 @@
+<script type="text/javascript">
+	/*
+		优点：代码简洁，速度快，时间复杂度为O(N)
+
+		缺点：需要一个额外的Set和Array的存储空间，空间复杂度为O(N)
+	*/
+	var a = [3, 62, 3, 38, 20, 42, 14, 5, 38, 29, 42];
+	function uniqueArray(arr) {
+		return Array.from(new Set(arr))
+	}
+
+	console.log(uniqueArray(a)) // [3, 62, 38, 20, 42, 14, 5, 29]
+</script>

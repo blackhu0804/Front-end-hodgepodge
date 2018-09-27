@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+    <style>
+        body, html {
+    margin: 0;
+}
+table {
+    border-collapse: collapse;
+    table-layout: fixed;
+    margin: 10px auto;
+}
+td {
+    border: 1px solid #E1E1E1;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+    cursor: pointer;
+}
+.current {
+    background: #1D2088;
+}
+.wrap {
+    background: #00A0E9;
+}
+    </style>
+</head>
+<body>
+    <table id="jsLayout">
+        <tbody>
+            <tr>
+                <td class="current"></td>
+                <td class="wrap"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td class="wrap"></td>
+                <td class="wrap"></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+            <tr>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+                <td></td>
+            </tr>
+        </tbody>
+    </table>
+
+<script>
+
+var td = document.getElementsByTagName('td')
+var n = document.getElementsByTagName('tr').length
+var m = td.length / n
+function clearClassName() {
+    for (var i = 0; i < td.length; i++) {
+        td[i].className = ''
+    }
+}
+for (var i = 0; i < td.length; i++) {
+    (function (i) {
+        td[i].addEventListener('click', function (event) {
+            clearClassName()
+            console.log(i)
+            let item = event.target
+            item.classList.add('current')
+            td[i + 1].classList.add('wrap')
+            td[i - 1].classList.add('wrap')
+            td[i - n].classList.add('wrap')
+            td[i - n - 1].classList.add('wrap')
+            td[i - n + 1].classList.add('wrap')
+            td[i + n].classList.add('wrap')
+            td[i + n - 1].classList.add('wrap')
+            td[i + n + 1].classList.add('wrap')
+        })
+    })(i)
+}
+</script>
+</body>
+</html>

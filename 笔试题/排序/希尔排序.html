@@ -1,0 +1,22 @@
+<script type="text/javascript">
+	function shellSort(arr) {
+		var length = arr.length
+		var temp
+		var gap = 1
+		while(gap < length / 5){
+			gap = gap*5 + 1
+		}
+		for(gap; gap > 0; gap = Math.floor(gap/5)) {
+			for(var i = gap; i < length; i++) {
+				temp = arr[i]
+				for(var j = i - gap; j>=0 && arr[j] > temp; j-= gap) {
+					arr[j+gap] = arr[j]
+				}
+				arr[j+gap] = temp
+			}
+		}
+		return arr
+	}	
+	var arr=[3,44,38,5,47,15,36,26,27,2]
+	console.log(shellSort(arr)) // [2, 3, 5, 15, 26, 27, 36, 38, 44, 47]
+</script>

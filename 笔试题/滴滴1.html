@@ -1,0 +1,15 @@
+<script>
+    let parseQueryString = function (url, key) {
+        let index = url.indexOf('?')
+        let query = url.slice(index + 1)
+        let obj = {}
+        let strs = query.split('&')
+        for (let i = 0; i < strs.length; i++) {
+            obj[strs[i].split('=')[0]] = strs[i].split('=')[1]
+        }
+        console.log(obj[key])
+        return obj[key] ? obj[key] : '_EMPTY_';
+    }
+
+    parseQueryString('https://www.didichuxing.com/path?key1=a&key2=123&key_3=key2', 'key')
+</script>

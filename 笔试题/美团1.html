@@ -1,0 +1,24 @@
+<script type="text/javascript">
+	var a, b;
+	var count = 0;
+	function makeTeam(a, b) {
+		// if(a > b) {
+	 //   		while(a > 0 && b > 0) {
+	 //   			a -= 2
+	 //   			b -= 1
+	 //   			count+=1
+	 //   		}
+	 //   	} else {
+	 //   		while(a > 0 && b > 0) {
+	 //   			a -= 1
+	 //   			b -= 2
+	 //   			count+=1
+	 //   		}
+	 //   	}
+	 //   	console.log(count)
+		console.log( Math.floor(Math.min( Math.min(a,b), (a+b)/3)) )
+	}
+	// while((a=readInt())!=null && (b=readInt())!=null){
+	//    	makeTeam(a, b)
+	// }
+</script>

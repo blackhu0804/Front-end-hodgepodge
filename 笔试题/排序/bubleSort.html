@@ -1,0 +1,18 @@
+<script type="text/javascript">
+	let arr = [10, 2, 31, 22, 5, 12]
+	
+	function bubleSort(arr) {
+		let len = arr.length
+		for(let i = len; i > 1; i--){
+			for(let j = 0; j < i; j++){
+				if(arr[j] > arr[j+1]){
+					let temp = arr[j]
+					arr[j] = arr[j+1]
+					arr[j+1] = temp
+				}
+			}
+		}
+		return arr
+	}
+
+</script>

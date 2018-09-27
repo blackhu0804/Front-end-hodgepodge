@@ -1,0 +1,18 @@
+<script type="text/javascript">
+	/*
+		3. 只用 Array
+		时间复杂度为O(N2)，空间复杂度为O(N)
+	*/
+	var a = [3, 3, 62, 3, 38, 20, 42, 14, 5, 38, 29, 42];
+	function uniqueArray(arr) {
+		let retArr = []
+		for(var i = 0;i < arr.length; i++) {
+			if(retArr.indexOf(arr[i]) < 0) {
+				retArr.push(arr[i])
+			}
+		}
+		return retArr
+	}
+
+	console.log(uniqueArray(a)) // [3, 62, 38, 20, 42, 14, 5, 29]
+</script>
