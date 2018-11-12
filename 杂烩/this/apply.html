@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>apply实现</title>
+</head>
+<body>
+    <script>
+        Function.prototype.apply2 = function (context) {
+            var context = context || window
+            context.fn = this
+            var result
+            // 判断是否有第二个参数
+            if(arguments[1]) {
+                result = context.fn(...arguments[1])
+            } else {
+                result = context.fn()
+            }
+            delete context.fn()
+            return result
+        }
+
+        var foo = {
+            value: 1
+        }
+        function bar(name, age) {
+            console.log(name)
+            console.log(age)
+            console.log(this.value);
+        }
+        bar.apply2(foo, ['black', '18']) // black 18 1
+    </script>
+</body>
+</html>

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>全选demo</title>
+</head>
+<body>
+	<div id="app">
+		<input type="checkbox" id="checkbox" v-model="checked" @change="changeAllChecked()">
+		<label for="checkbox">
+			全选
+		</label>
+		<p>
+			多个复选框：
+		</p>
+		<input type="checkbox" v-for="list in checkedArr" v-model="checkedNames">
+	</div>
+	<script src="https://cdn.jsdelivr.net/npm/vue@2.5.17/dist/vue.js"></script>
+	<script type="text/javascript">
+		new Vue({
+			el: '#app',
+			data: {
+				checked: false,
+				checkedNames: [],
+				checkedArr: ["Runoob", "Taobao", "Google"]
+			},
+			methods: {
+				changeAllChecked: function() {
+					if (this.checked) {
+						this.checkedNames = this.checkedArr
+					} else {
+						this.checkedNames = []
+					}
+				}
+			},
+			watch: {
+				"checkedNames": function() {
+					if (this.checkedNames.length == this.checkedArr.length) {
+						this.checked = true
+					} else {
+						this.checked = false
+					}
+				}
+			}
+		})
+	</script>
+</body>
+</html>
