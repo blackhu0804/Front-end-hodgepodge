@@ -8,7 +8,7 @@
             "type": "node",
             "request": "launch",
             "name": "启动程序",
-            "program": "${workspaceFolder}/JS编程\\剑指offer\\21.栈的压入、弹出序列.js"
+            "program": "${workspaceFolder}\\JS编程\\LeetCode-351.js"
         }
     ]
 }
