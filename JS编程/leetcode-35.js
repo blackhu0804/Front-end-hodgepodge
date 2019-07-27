@@ -24,4 +24,4 @@ var searchInsert = function(nums, target) {
     }
   }
 };
-searchInsert([1, 3, 5, 6], 5) 
+searchInsert([1, 3, 5, 6], 5)
