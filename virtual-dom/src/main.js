@@ -1,18 +1,21 @@
-import element from "./virtualDom.js";
+import el from "./virtualDom.js";
+import diff from './diff.js';
 
-let ul = element(
-  'ul',
-  {
-    id: 'list'
-  },
-  [
-    element( 'li', {class: 'item'}, ['item1'] ),
-    element( 'li', {class: 'item'}, ['item2'] ),
-    element( 'li', {class: 'item'}, ['item3'] ),
-  ]
-);
+let ul = el('ul', { id: 'list' }, [
+  el('li', { class: 'item' }, ['Item 1']),
+  el('li', { class: 'item', key: 1 }, ['Item 2']),
+  el('li', { class: 'item' }, ['Item 3'])
+])
+let ul1 = el('ul', { id: 'list' }, [
+  el('li', { class: 'item' }, ['Item 3']),
+  el('li', { class: 'item' }, ['Item 1']),
+  el('li', { class: 'item', key: 1 }, ['Item 2'])
+])
+let patches = diff(ul, ul1);
 
-let app = document.getElementById("app");
-let ulRoot = ul.render();
+console.log(patches);
 
-app.appendChild(ulRoot);
+// let app = document.getElementById("app");
+// let ulRoot = ul.render();
+
+// app.appendChild(ulRoot);

@@ -1,14 +1,20 @@
-/* <ul id="list">
-  <li class="item">item1</li>
-  <li class="item">item2</li>
-  <li class="item">item3</li>
-</ul> */
+import * as _ from "./utils";
 
-import * as _ from './utils';
-
+/**
+ * @class Element Virtrual Dom
+ * @param { String } tagName
+ * @param { Object } attrs   Element's attrs, eg: { id: 'list' }
+ * @param { Array <Element|String> } - This element's children elements.
+ *                                   - Can be Element instance or just a piece plain text.
+ */
 class Element {
-  constructor (tagName, attrs, children) {
-    // 如果只有两个参数
+  constructor(tagName, attrs, children) {
+    if (!(this instanceof Element)) {
+      if (!_.isArray(children) && children !== null) {
+        children = _.slice(arguments, 2).filter(_.truthy);
+      }
+    }
+
     if (_.isArray(attrs)) {
       children = attrs;
       attrs = {};
@@ -24,22 +30,25 @@ class Element {
     let el = document.createElement(this.tagName);
     let attrs = this.attrs;
 
-    for (let attrName in attrs) { // 遍历设置结点的属性
+    for (let attrName in attrs) {
       let attrValue = attrs[attrName];
       _.setAttr(el, attrName, attrValue);
     }
 
     let children = this.children || [];
+
     children.forEach(child => {
-      let childEl = child instanceof Element
-          ? child.render() // 若子节点也是虚拟节点，递归进行构建
-          : document.createTextNode(child) // 如果是字符串，直接创建
+      let childEl =
+        child instanceof Element
+          ? child.render()
+          : document.createTextNode(child);
       el.appendChild(childEl);
-    })
+    });
+
     return el;
   }
 }
 
-export default function(tagName, props, children) {
-  return new Element(tagName, props, children);
-}
+export default function el(tagName, attrs, children) {
+  return new Element(tagName, attrs, children);
+};

@@ -16,7 +16,6 @@ _.setAttr = function setAttr(node, key, value) {
       }
       break;
     default:
-      console.log(node, key, value);
       node.setAttribute(key, value);
       break;
   }
