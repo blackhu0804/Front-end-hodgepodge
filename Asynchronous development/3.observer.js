@@ -1,39 +1,41 @@
 /**
  * 3. 观察者模式
  */
+class Subject {
+  constructor() {
+    this.observers = [];
+    this.state = 'staring';
+  }
 
-function Subject() {
-  this.observers = [];
-  this.state = 'staring';
-}
+  attach(observer) {
+    this.observers.push(observer);
+  }
 
-Subject.prototype.attach = function(observer) {
-  this.observers.push(observer);
-}
+  notify() {
+    this.observers.forEach(observer => {
+      observer.update();
+    })
+  }
 
-Subject.prototype.notify = function() {
-  this.observers.forEach(observer => {
-    observer.update();
-  })
-}
-
-Subject.prototype.setState = function (state) {
-  this.state = state;
-  this.notify();
+  setState(state) {
+    this.state = state;
+    this.notify();
+  }
 }
 /**
  * 观察者
  */
-function Observer(name, target) { 
-  this.name = name;
-  this.target = target;
-}
-Observer.prototype.update = function() {
-  // 更新方法
-  console.log(`通知：${this.name}，当前状态为${this.target.state}`);
-}
+class Observer {
+  constructor(name, target) {
+    this.name = name;
+    this.target = target;
+  }
 
-
+  update() {
+    // 更新方法
+    console.log(`通知：${this.name}，当前状态为${this.target.state}`);
+  }
+}
 
 let subject = new Subject();
 
@@ -45,6 +47,41 @@ subject.attach(observer1);
 subject.attach(observer2);
 
 subject.setState('end');
+
+/**
+ * ES5
+ */
+// function Subject() {
+//   this.observers = [];
+//   this.state = 'staring';
+// }
+
+// Subject.prototype.attach = function(observer) {
+//   this.observers.push(observer);
+// }
+
+// Subject.prototype.notify = function() {
+//   this.observers.forEach(observer => {
+//     observer.update();
+//   })
+// }
+
+// Subject.prototype.setState = function (state) {
+//   this.state = state;
+//   this.notify();
+// }
+
+// /**
+//  * 观察者
+//  */
+// function Observer(name, target) { 
+//   this.name = name;
+//   this.target = target;
+// }
+// Observer.prototype.update = function() {
+//   // 更新方法
+//   console.log(`通知：${this.name}，当前状态为${this.target.state}`);
+// }
 
 /**
  * 缺点：

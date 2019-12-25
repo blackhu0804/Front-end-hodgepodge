@@ -3,20 +3,39 @@
  */
 const fs = require('fs');
 
-function Event() { 
-  this.events = [];
+class Event {
+  constructor() {
+    this.events = [];
+  }
+
+  on(fn) {
+    this.events.push(fn);
+  }
+
+  emit(data) {
+    this.events.forEach(function(fn) {
+      fn(data);
+    });
+  }
 }
 
-Event.prototype.on = function(fn) {
-  this.events.push(fn);
-}
+/**
+ * ES5
+ */
+// function Event() { 
+//   this.events = [];
+// }
+
+// Event.prototype.on = function(fn) {
+//   this.events.push(fn);
+// }
 
 
-Event.prototype.emit = function(data) {
-  this.events.forEach(function(fn) {
-    fn(data);
-  })
-}
+// Event.prototype.emit = function(data) {
+//   this.events.forEach(function(fn) {
+//     fn(data);
+//   })
+// }
 
 
 let e = new Event();

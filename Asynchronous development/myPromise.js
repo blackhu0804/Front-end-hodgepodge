@@ -6,36 +6,71 @@
  * 5. 状态变为成功或失败不能更改
  */
 
-function Promise(exector) {
-  let that = this;
-  that.status = 'pending';
-  that.value = undefined;
-  that.reason = undefined;
-  function resolve(value) {
-    if (that.status === 'pending') {
-      that.status = 'fulfilled';
-      that.value = value;
+class Promise {
+  constructor(exector) {
+    this.status = 'pending';
+    this.value = undefined;
+    this.reason = undefined;
+    let resolve = (value) => {
+      if (this.status === 'pending') {
+        this.status = 'fulfilled';
+        this.value = value;
+      }
+    }
+
+    let reject = (reason) => {
+      if (this.status === 'pending') {
+        this.status = 'rejected';
+        this.reason = reason;
+      }
+    }
+
+    exector(resolve, reject);
+  }
+
+  then(onFulFilled, onRejected) {
+    if (this.status === 'fulfilled') {
+      onFulFilled(this.value);
+    }
+    if (this.status === 'rejected') {
+      onRejected(this.reason);
     }
   }
-
-  function reject(reason) {
-    if (that.status === 'pending') {
-      that.status = 'rejected';
-      that.reason = reason;
-    }
-  }
-
-  exector(resolve, reject);
 }
 
+/**
+ * ES5
+ */
+// function Promise(exector) {
+//   let that = this;
+//   that.status = 'pending';
+//   that.value = undefined;
+//   that.reason = undefined;
+//   function resolve(value) {
+//     if (that.status === 'pending') {
+//       that.status = 'fulfilled';
+//       that.value = value;
+//     }
+//   }
 
-Promise.prototype.then = function(onFulFilled, onRejected) {
-  let that = this;
-  if (that.status === 'fulfilled') {
-    onFulFilled(that.value);
-  }
-  if (that.status === 'rejected') {
-    onRejected(that.reason);
-  }
-}
+//   function reject(reason) {
+//     if (that.status === 'pending') {
+//       that.status = 'rejected';
+//       that.reason = reason;
+//     }
+//   }
+
+//   exector(resolve, reject);
+// }
+
+
+// Promise.prototype.then = function(onFulFilled, onRejected) {
+//   let that = this;
+//   if (that.status === 'fulfilled') {
+//     onFulFilled(that.value);
+//   }
+//   if (that.status === 'rejected') {
+//     onRejected(that.reason);
+//   }
+// }
 module.exports = Promise;
