@@ -14,23 +14,35 @@ const resolvePromise = (promise2, x, resolve, reject) => {
   }
   // 判断x的类型是Promise还是普通值
   // 如果x不是对象也不是函数 string null undefined
+  let called;
   if ((typeof x == 'object' && x !== null) || typeof x === 'function') {
     try { // 有可能这个then方法在别人的promise中通过defineProperty定义的取值的时候可能会发生异常，那么就让这个promise2变成失败即可
       let then = x.then;
       if (typeof then === 'function') { // 如果有then函数说明他是一个promise
         then.call(x, (y) => { //解析y保证是一个普通值
+          if (called) {
+            return;
+          }
+          called = true;
           resolvePromise(promise2, y, resolve, reject);
         }, r => {
+          if(called) {
+            return;
+          }
+          called = true;
           reject(r);
         });
       } else {
         resolve(x);
       }
     } catch (error) {
+      if(called) {
+        return;
+      }
+      called = true;
       reject(e);
     }
   } else {
-    // x 就是一个普通值
     resolve(x);
   }
 };
@@ -65,6 +77,10 @@ class Promise {
   }
 
   then(onFulFilled, onRejected) {
+    // 连续透传
+    onFulFilled =  typeof onFulFilled === 'function' ? onFulFilled : val => val;
+    onRejected =  typeof onRejected === 'function' ? onRejected : err => {throw err};
+
     let promise2 = new Promise((resolve, reject) => {
       if (this.status === RESOLVED) {
         setTimeout(() => {
@@ -109,39 +125,12 @@ class Promise {
   }
 }
 
-/**
- * ES5
- */
-// function Promise(exector) {
-//   let that = this;
-//   that.status = 'pending';
-//   that.value = undefined;
-//   that.reason = undefined;
-//   function resolve(value) {
-//     if (that.status === 'pending') {
-//       that.status = 'fulfilled';
-//       that.value = value;
-//     }
-//   }
-
-//   function reject(reason) {
-//     if (that.status === 'pending') {
-//       that.status = 'rejected';
-//       that.reason = reason;
-//     }
-//   }
-
-//   exector(resolve, reject);
-// }
-
-
-// Promise.prototype.then = function(onFulFilled, onRejected) {
-//   let that = this;
-//   if (that.status === 'fulfilled') {
-//     onFulFilled(that.value);
-//   }
-//   if (that.status === 'rejected') {
-//     onRejected(that.reason);
-//   }
-// }
+Promise.defer = Promise.deferred = function () {
+  let dfd = {};
+  dfd.Promise = new Promise((resolve, reject) => {
+    dfd.resolve = resolve;
+    dfd.reject = reject;
+  })
+  return dfd;
+}
 module.exports = Promise;

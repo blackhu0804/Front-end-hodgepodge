@@ -9,21 +9,29 @@ let promise = new Promise(function (resolve, reject) {
   // setTimeout(() => {
   //   resolve(1);
   // }, 1000)
-  resolve();
+  resolve(100);``
 });
 
-let promise2 = promise.then(() => {
-  return new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve('成功');
-    }, 1000);
-  })
-});
-promise2.then((data) => {
-  console.log('success', data);
-}, err => {
-  console.log(err);
-});
+promise.then().then().then(data => {
+  console.log(data);
+})
+
+// let promise2 = promise.then(() => {
+//   return new Promise((resolve, reject) => {
+//     setTimeout(() => {
+//       resolve('成功');
+//     }, 1000);
+//   })
+// });
+
+
+// promise2.then((data) => {
+//   console.log('success', data);
+// }, err => {
+//   console.log(err);
+// });
+
+
 // promise.then(function (value) {
 //   console.log('success', value);
 // }, function (reason) {
