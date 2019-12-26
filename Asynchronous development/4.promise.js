@@ -13,10 +13,14 @@ let promise = new Promise(function (resolve, reject) {
 });
 
 let promise2 = promise.then(() => {
-  return promise2;
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      resolve('成功');
+    }, 1000);
+  })
 });
-promise2.then(() => {
-  console.log('success');
+promise2.then((data) => {
+  console.log('success', data);
 }, err => {
   console.log(err);
 });

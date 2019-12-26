@@ -13,6 +13,26 @@ const resolvePromise = (promise2, x, resolve, reject) => {
     return reject(new Error('Chaining cycle detected for Promise #<Promise>'));
   }
   // 判断x的类型是Promise还是普通值
+  // 如果x不是对象也不是函数 string null undefined
+  if ((typeof x == 'object' && x !== null) || typeof x === 'function') {
+    try { // 有可能这个then方法在别人的promise中通过defineProperty定义的取值的时候可能会发生异常，那么就让这个promise2变成失败即可
+      let then = x.then;
+      if (typeof then === 'function') { // 如果有then函数说明他是一个promise
+        then.call(x, (y) => { //解析y保证是一个普通值
+          resolvePromise(promise2, y, resolve, reject);
+        }, r => {
+          reject(r);
+        });
+      } else {
+        resolve(x);
+      }
+    } catch (error) {
+      reject(e);
+    }
+  } else {
+    // x 就是一个普通值
+    resolve(x);
+  }
 };
 
 class Promise {
