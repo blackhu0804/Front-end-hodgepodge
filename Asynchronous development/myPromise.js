@@ -8,6 +8,13 @@
 const PENDING = 'PENDING';
 const RESOLVED = 'RESOLVED';
 const REJECTED = 'REJECTED';
+const resolvePromise = (promise2, x, resolve, reject) => {
+  if (promise2 === x) { // 死循环，报错
+    return reject(new Error('Chaining cycle detected for Promise #<Promise>'));
+  }
+  // 判断x的类型是Promise还是普通值
+};
+
 class Promise {
   constructor(exector) {
     this.status = PENDING;
@@ -38,21 +45,47 @@ class Promise {
   }
 
   then(onFulFilled, onRejected) {
-    if (this.status === RESOLVED) {
-      onFulFilled(this.value);
-    }
-    if (this.status === REJECTED) {
-      onRejected(this.reason);
-    }
-    if (this.status === PENDING) {
-      // 如果是异步将方法存到数组中
-      this.onResolveCallbacks.push(() => {
-        onFulFilled(this.value);
-      });
-      this.onRejectedCallbacks.push(() => {
-        onRejected(this.reason);
-      });
-    }
+    let promise2 = new Promise((resolve, reject) => {
+      if (this.status === RESOLVED) {
+        setTimeout(() => {
+          try {
+            let x = onFulFilled(this.value);
+            resolvePromise(promise2, x, resolve, reject);
+          } catch (error) {
+            reject(error)
+          }
+        }, 0)
+      }
+      if (this.status === REJECTED) {
+        try {
+          let x = onRejected(this.reason);
+          resolvePromise(promise2, x, resolve, reject);
+        } catch (error) {
+          reject(error);
+        }
+      }
+      if (this.status === PENDING) {
+        // 如果是异步将方法存到数组中
+        this.onResolveCallbacks.push(() => {
+          try {
+            let x = onFulFilled(this.value);
+            resolvePromise(promise2, x, resolve, reject);
+          } catch (error) {
+            reject(error);
+          }
+        });
+        this.onRejectedCallbacks.push(() => {
+          try {
+            let x = onRejected(this.reason);
+            resolvePromise(promise2, x, resolve, reject);  
+          } catch (error) {
+            reject(error); 
+          }
+        });
+      }
+    })
+
+    return promise2;
   }
 }
 

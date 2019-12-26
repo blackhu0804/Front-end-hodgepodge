@@ -6,13 +6,22 @@
 
 const Promise = require('./myPromise.js');
 let promise = new Promise(function (resolve, reject) {
-  setTimeout(() => {
-    resolve(1);
-  }, 1000)
+  // setTimeout(() => {
+  //   resolve(1);
+  // }, 1000)
+  resolve();
 });
 
-promise.then(function (value) {
-  console.log('success', value);
-}, function (reason) {
-  console.log('reason', reason);
-})
+let promise2 = promise.then(() => {
+  return promise2;
+});
+promise2.then(() => {
+  console.log('success');
+}, err => {
+  console.log(err);
+});
+// promise.then(function (value) {
+//   console.log('success', value);
+// }, function (reason) {
+//   console.log('reason', reason);
+// })
