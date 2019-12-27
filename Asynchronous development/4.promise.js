@@ -6,10 +6,10 @@
 
 const Promise = require('./myPromise.js');
 let promise = new Promise(function (resolve, reject) {
-  // setTimeout(() => {
-  //   resolve(1);
-  // }, 1000)
-  resolve(100);``
+  setTimeout(() => {
+    resolve(1);
+  }, 1000)
+  // resolve(100);
 });
 
 promise.then().then().then(data => {

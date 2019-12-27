@@ -9,26 +9,23 @@ const PENDING = 'PENDING';
 const RESOLVED = 'RESOLVED';
 const REJECTED = 'REJECTED';
 const resolvePromise = (promise2, x, resolve, reject) => {
+  let called = false;
   if (promise2 === x) { // 死循环，报错
-    return reject(new Error('Chaining cycle detected for Promise #<Promise>'));
+    return reject(new TypeError('Chaining cycle detected for Promise #<Promise>'));
   }
+
   // 判断x的类型是Promise还是普通值
   // 如果x不是对象也不是函数 string null undefined
-  let called;
   if ((typeof x == 'object' && x !== null) || typeof x === 'function') {
     try { // 有可能这个then方法在别人的promise中通过defineProperty定义的取值的时候可能会发生异常，那么就让这个promise2变成失败即可
       let then = x.then;
       if (typeof then === 'function') { // 如果有then函数说明他是一个promise
         then.call(x, (y) => { //解析y保证是一个普通值
-          if (called) {
-            return;
-          }
+          if (called) return;
           called = true;
           resolvePromise(promise2, y, resolve, reject);
         }, r => {
-          if(called) {
-            return;
-          }
+          if(called) return;
           called = true;
           reject(r);
         });
@@ -36,11 +33,9 @@ const resolvePromise = (promise2, x, resolve, reject) => {
         resolve(x);
       }
     } catch (error) {
-      if(called) {
-        return;
-      }
+      if(called) return;
       called = true;
-      reject(e);
+      reject(error);
     }
   } else {
     resolve(x);
@@ -52,13 +47,13 @@ class Promise {
     this.status = PENDING;
     this.value = undefined;
     this.reason = undefined;
-    this.onResolveCallbacks = []; //存储成功的回调
+    this.onResolvedCallbacks = []; //存储成功的回调
     this.onRejectedCallbacks = []; //存储失败的回调
     let resolve = (value) => {
       if (this.status === PENDING) {
         this.status = RESOLVED;
         this.value = value;
-        this.onResolveCallbacks.forEach(fn => fn());
+        this.onResolvedCallbacks.forEach(fn => fn());
       }
     }
 
@@ -78,7 +73,7 @@ class Promise {
 
   then(onFulFilled, onRejected) {
     // 连续透传
-    onFulFilled =  typeof onFulFilled === 'function' ? onFulFilled : val => val;
+    onFulFilled =  typeof onFulFilled === 'function' ? onFulFilled : val => {return val};
     onRejected =  typeof onRejected === 'function' ? onRejected : err => {throw err};
 
     let promise2 = new Promise((resolve, reject) => {
@@ -90,33 +85,39 @@ class Promise {
           } catch (error) {
             reject(error)
           }
-        }, 0)
+        }, 0);
       }
       if (this.status === REJECTED) {
-        try {
-          let x = onRejected(this.reason);
-          resolvePromise(promise2, x, resolve, reject);
-        } catch (error) {
-          reject(error);
-        }
-      }
-      if (this.status === PENDING) {
-        // 如果是异步将方法存到数组中
-        this.onResolveCallbacks.push(() => {
+        setTimeout(() => {
           try {
-            let x = onFulFilled(this.value);
+            let x = onRejected(this.reason);
             resolvePromise(promise2, x, resolve, reject);
           } catch (error) {
             reject(error);
           }
+        }, 0);
+      }
+      if (this.status === PENDING) {
+        // 如果是异步将方法存到数组中
+        this.onResolvedCallbacks.push(() => {
+          setTimeout(() => {
+            try {
+              let x = onFulFilled(this.value);
+              resolvePromise(promise2, x, resolve, reject);
+            } catch (error) {
+              reject(error);
+            }
+          }, 0);
         });
         this.onRejectedCallbacks.push(() => {
-          try {
-            let x = onRejected(this.reason);
-            resolvePromise(promise2, x, resolve, reject);  
-          } catch (error) {
-            reject(error); 
-          }
+          setTimeout(() => {
+            try {
+              let x = onRejected(this.reason);
+              resolvePromise(promise2, x, resolve, reject);  
+            } catch (error) {
+              reject(error); 
+            }
+          }, 0);
         });
       }
     })
@@ -127,7 +128,7 @@ class Promise {
 
 Promise.defer = Promise.deferred = function () {
   let dfd = {};
-  dfd.Promise = new Promise((resolve, reject) => {
+  dfd.promise = new Promise((resolve, reject) => {
     dfd.resolve = resolve;
     dfd.reject = reject;
   })
