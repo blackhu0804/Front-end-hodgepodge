@@ -289,7 +289,7 @@ const go = function*(){
 
 ### Array.from()
 
-`Array.from`方法用于将两类对象转为真正的数组：类似数组的对象（array-like object）和可遍历（iterable）的对象（包括 ES6 新增的数据结构 Set 和 Map）。 
+`Array.from`方法用于将两类对象转为真正的数组：类似数组的对象（array-like object）和可遍历（iterable）的对象（包括 ES6 新增的数据结构 Set 和 Map）。 不借助自身的迭代器。`...`能展开的内容必须要有迭代器。
 
 ```javascript
 let arrayLike = {
@@ -309,6 +309,20 @@ let namesSet = new Set(['a', 'b'])
 Array.from(namesSet) // ['a', 'b']
 ```
 
+```javascript
+// ... 的使用依赖于迭代器
+console.log([...{
+  0: 1,
+  1: 2,
+  lenght: 2,
+  [Symbol.iterator]: function *() {
+    let idx = 0;
+    while(idx !== this.length) {
+      yield this[idx++];
+    }
+  }
+}])
+```
 ### Array.of()
 
 `Array.of`方法用于将一组值，转换为数组。
