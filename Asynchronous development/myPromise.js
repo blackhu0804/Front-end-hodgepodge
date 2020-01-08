@@ -50,6 +50,9 @@ class Promise {
     this.onResolvedCallbacks = []; //存储成功的回调
     this.onRejectedCallbacks = []; //存储失败的回调
     let resolve = (value) => {
+      if (value instanceof Promise) { // 如果resolve一个promise
+        return value.then(resolve, reject);
+      }
       if (this.status === PENDING) {
         this.status = RESOLVED;
         this.value = value;
@@ -124,6 +127,18 @@ class Promise {
 
     return promise2;
   }
+
+  catch(errCallback) {
+    return this.then(null, errCallback);
+  }
+
+  finally(callback) {
+    return this.then((data) => {
+      return Promise.resolve(callback).then(() => data);
+    }, err => {
+      return Promise.resolve(callback()).then(() => {throw err});
+    });
+  }
 }
 
 Promise.defer = Promise.deferred = function () {
@@ -133,5 +148,57 @@ Promise.defer = Promise.deferred = function () {
     dfd.reject = reject;
   })
   return dfd;
+}
+
+Promise.resolve = function (value) {
+  return new Promise((resolve, reject) => {
+    resolve(value);
+  }) 
+}
+
+Promise.reject = function (reason) {
+  return new Promise((resolve, reject) => {
+    reject(reason);
+  }) 
+}
+
+const isPromise = function (value) {
+  return typeof value.then === 'function';
+}
+
+Promise.all = function (promises) {
+  return new Promise((resolve, reject) => {
+    let resultArr = [];
+    let idx = 0;
+    const processData = (data, i) => {
+      resultArr[index] = data;
+      if (++idx === promises.length) {
+        resolve(resultArr);
+      }
+    }
+
+    for(let i = 0; i < promises.length; i++) {
+      let currentValue = promises[i];
+      if (isPromise(currentValue)) {
+        currentValue.then(data => {
+          processData(data, i);
+        }, reject)
+      } else {
+        processData(currentValue, i);
+      }
+    }
+  })
+}
+
+Promise.race = function (promises) {
+  return new Promise(function (resolve, reject) {
+    for(let i = 0; i < promises.length; i++) {
+      Promise.resolve(promises[i]).then(value => {
+        return resolve(value);
+      }, err => {
+        return reject(err);
+      })
+    }
+  })
 }
 module.exports = Promise;
