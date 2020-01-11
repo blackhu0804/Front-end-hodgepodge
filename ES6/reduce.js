@@ -40,6 +40,9 @@ let flatArr = [1, [2, 3, [4, [5]]]];
 let resultArr = flatten(flatArr);
 console.log(resultArr);
 
+/**
+ * 数组合并成对象
+ */
 let keys = ['name', 'age'];
 let values = ['black', '18'];
 let result3 = keys.reduce((prev, current, index) => {
@@ -48,3 +51,14 @@ let result3 = keys.reduce((prev, current, index) => {
 }, {});
 
 console.log(result3);
+
+/**
+ * compose 将多个函数组合成一个函数
+ */
+function compose(...fns) {
+  return fns.reduce(function (prev, next) {
+    return function (...values) {
+      return prev(next(...values));
+    }
+  });
+}
