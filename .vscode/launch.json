@@ -8,7 +8,6 @@
             "type": "node",
             "request": "launch",
             "name": "启动程序",
-            "program": "${workspaceFolder}\\JS编程\\LeetCode-351.js"
         }
     ]
 }
