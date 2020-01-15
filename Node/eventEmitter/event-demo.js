@@ -2,25 +2,35 @@
 
 // 发布订阅模式
 
-let EventEmitter = require('./event');
+let EventEmitter = require('./event.js');
 let util = require('util');
 
-let e = new EventEmitter();
-
 function Person() {
-  // EventEmitter.call(this);
 }
 
 util.inherits(Person, EventEmitter); // 实现继承公共属性
 
 let person = new Person();
 
-person.on('greet', function (name) {
+const Hello = function (name) {
   console.log('hello, ' + name);
-});
+}
 
-person.on('work', function (name) {
-  console.log('working, ' + name);
+person.on('newListener', function (type) {
+  process.nextTick(() => {
+    person.emit(type);
+  });
+})
+
+person.on('greet', Hello);
+person.on('greet', function (name) {
+  console.log('greet, ' + name);
 });
+// person.on('work', function (name) {
+//   console.log('working, ' + name);
+// });
 
 person.emit('greet', 'black');
+// person.emit('work', 'black');
+
+person.off('greet', Hello);
