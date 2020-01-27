@@ -10,7 +10,12 @@ class Server {
     // console.log(this);
     let {pathname} = url.parse(req.url, true);
     let absPath = path.join(__dirname, pathname);
-    console.log(absPath);
+
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Headers', 'token'); // 允许接受 token
+    res.setHeader('Access-Control-Allow-Methods', 'PUT, DELETE'); // 允许的请求方法
+    res.setHeader('Access-Control-Max-Age', 10*60); // 预检请求的有效时间。也就是options请求后下一次options的有效时间
+
     try {
       let statObj = await fs.stat(absPath);
       console.log(statObj);
