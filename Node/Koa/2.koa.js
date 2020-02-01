@@ -1,4 +1,6 @@
-const Koa = require('koa');
+const Koa = require('./mykoa');
+// const Koa = require('koa');
+
 const sleep = (time) => {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
@@ -28,5 +30,9 @@ app.use(function (ctx, next) {
   next();
   console.log(6);
 });
+
+app.on('error', (e) =>{
+  console.log('错误了');
+})
 
 app.listen(3000);
