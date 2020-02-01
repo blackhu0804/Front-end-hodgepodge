@@ -1,4 +1,3 @@
-console.log('------');
 const EventEmitter = require('events');
 const http = require('http');
 const request = require('./request'); // Koa 自己封装的请求相关的属性和方法
@@ -90,7 +89,6 @@ module.exports = class Application extends EventEmitter {
       res.statusCode = 500;
       res.end('Internal server error');
     });
-    // this.middleware(ctx); // 这个函数执行完毕后用户默认会给 body 赋值
   }
 
   listen () {
