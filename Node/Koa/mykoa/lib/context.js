@@ -9,7 +9,15 @@ function defineGetter (target, property) {
   });
 }
 
+function defineSetter (target, property) {
+  proto.__defineSetter__(property, function(value) {
+    this[target][property] = value;
+  })
+}
+
 defineGetter('request', 'url');
 defineGetter('request', 'path');
 
+defineGetter('response', 'body');
+defineSetter('response', 'body');
 module.exports = proto;
