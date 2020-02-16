@@ -49,6 +49,8 @@ function A(){
     }
 }
 let instance = new new A();
+
+// {a: 'a', b: 'b'}
 ```
 
 ### 4.Promise.resolve
@@ -56,7 +58,8 @@ let instance = new new A();
 const p =Promise.resolve();
 ;(()=>{
     const implicit_promise = new Promise(resolve =>{
-        const promise = new Promise(res=>res(p)); 
+        const promise = new Promise(res=>res(p));
+        // res => res(p) 相当于 () => { p.then(res) }
         promise.then(()=>{
             console.log('after:await');
             resolve()
@@ -71,6 +74,11 @@ p.then(()=>{
 }).then(()=>{
     console.log('tick:c');
 });
+
+// tick:a
+// tick:b
+// after:await
+// tick:c
 ```
 
 ### 5.async + await问题
@@ -82,6 +90,10 @@ async function asyncFunc1 () {
     console.log('asyncFunc1 start')
     await asyncFunc2()
     console.log('asyncFunc1 end')
+    // await asyncFunc2 等同于
+    // new Promise(res => res(asyncFunc2())).then(() => {
+    //     console.log('asyncFunc1 end');
+    // })
 }
 async function asyncFunc2 () {
     console.log('asyncFunc2')
@@ -95,6 +107,15 @@ new Promise(function (resolve) {
     console.log('promise2')
 })
 console.log('script end')
+
+// script start
+// asyncFunc1 start
+// asyncFunc2
+// promise1
+// script end
+// promise2
+// asyncFunc1 end
+// setTimeout
 ```
 
 
