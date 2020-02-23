@@ -90,4 +90,21 @@ function count(): never {
  * nerver 和 void 区别
  * 1. void 可以被赋值为 null 和 undefined 的类型。nerver 是一个不包含值的类型
  * 2. void 返回值类型的函数能正常运行, never 返回值类型的函数违法正常返回，无法终止，或会抛出异常
+ */ 
+
+ /**
+  * 类型断言
+  */
+let name2: string | number;
+name2 = 'black';
+console.log((name2 as string).length);
+name2 = 18;
+console.log((name2 as number).toFixed(2));
+
+/**
+ * 字面量类型
  */
+let value: 1 | 2 | 3 | 'one';
+// 不能将其他值赋给value
+value = 1;
+value = 3;
