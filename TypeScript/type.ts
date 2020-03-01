@@ -108,3 +108,10 @@ let value: 1 | 2 | 3 | 'one';
 // 不能将其他值赋给value
 value = 1;
 value = 3;
+
+
+/**
+ * unkonwn 
+ * 只能赋值给any类型和自己
+ */
+let value2: unknown;
