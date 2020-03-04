@@ -6,6 +6,14 @@
   <title>Document</title>
 </head>
 <body>
-  <div id="app"></div>
+  <div id="app">
+    <input type="text" v-model="msg">
+    {{msg}}
+    <div>
+      <p>学校名字 {{school.name}}</p>
+      <p>学校年龄 {{school.age}}</p>
+    </div>
+    <div>{{arr}}</div>
+  </div>
 </body>
 </html>
