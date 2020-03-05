@@ -41,8 +41,62 @@ class Watcher { // 每次产生一个watch 都会有一个唯一的标识
   }
 
   update() {
+    queueWatcher(this);
+  }
+
+  run() {
     this.get();
   }
+}
+
+let has = {};
+let queue = [];
+function flushQueue() {
+  queue.forEach(wathcer => watcher.run());
+  has = {};
+  queue = [];
+}
+
+function queueWatcher(wathcer) {
+  // 对重复的wathcer进行过滤操作, 相同的 watcher 只会存一个
+  let id = wathcer.id;
+  if(has[id] == null) {
+    has[id] = true;
+    queue.push(wathcer);
+    // 延迟清空队列
+    nextTick(flushQueue);
+  }
+}
+
+let callbacks = [];
+function flushCallbacks() {
+  callbacks.forEach(cb => cb());
+}
+
+/**
+ * 异步刷新方法
+ * @param {*} cb 
+ */
+function nextTick(cb) {
+  callbacks.push(cb);
+  // 异步刷新callbacks，获取一个异步的方法
+  let timerFunc = () => {
+    flushCallbacks();
+  }
+  if (Promise) {
+    return Promise.resolve().then(timerFunc);
+  }
+  if (MutationObserver) {
+    let observe = new MutationObserver(timerFunc);
+    let textNode = document.createTextNode(1);
+    observe.observe(textNode, {characterData: true});
+    textNode.textContent = 2;
+    return;
+  }
+  if(setImmediate) {
+    return setImmediate(timerFunc);
+  }
+  return setTimeout(timerFunc, 0);
 }
 
 export default Watcher;

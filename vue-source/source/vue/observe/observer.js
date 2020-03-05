@@ -21,7 +21,6 @@ export function defineReactive(data, key, value) {
     },
     set(newValue) {
       if (newValue === value) return;
-      console.log('设置数据');
       observe(newValue); // 如果新设置的值是一个对象， 应该添加监测
       value = newValue;
       dep.notify();
