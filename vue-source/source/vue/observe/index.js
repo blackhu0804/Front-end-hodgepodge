@@ -17,6 +17,9 @@ export function observe(data) {
   if(typeof data !== 'object' || data == null) {
     return; // 不是对象或为null 不执行后续逻辑
   }
+  if (data.__ob__) {
+    return data.__ob__;
+  }
   return new Observer(data);
 }
 

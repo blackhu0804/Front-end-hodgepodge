@@ -52,7 +52,7 @@ class Watcher { // 每次产生一个watch 都会有一个唯一的标识
 let has = {};
 let queue = [];
 function flushQueue() {
-  queue.forEach(wathcer => watcher.run());
+  queue.forEach(watcher => watcher.run());
   has = {};
   queue = [];
 }
