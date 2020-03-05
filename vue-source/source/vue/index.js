@@ -62,5 +62,7 @@ Vue.prototype.$mount = function() {
     vm._update(); // 更新组件
   }
   new Watcher(vm, updateComponent); // 渲染Watcher, 默认调用updateComponent
+
+  // 如果数据更新了， 需要重新更新视图 --> 依赖收集
 }
 export default Vue

@@ -1,5 +1,6 @@
 import {observe} from './index';
 import { arrayMethods, observerArray } from './array';
+import Dep from './dep';
 
 /**
  * 定义响应式的数据变化
@@ -10,9 +11,12 @@ import { arrayMethods, observerArray } from './array';
 export function defineReactive(data, key, value) {
   // 如果value依旧是一个对象，需要深度劫持
   observe(value);
+  let dep = new Dep(); // dep 里可以收集依赖， 收集的是wathcer
   Object.defineProperty(data, key, {
     get() {
-      console.log('获取数据');
+      if (Dep.target) { // 这次有值 用的是渲染wathcer
+        dep.depend();
+      }
       return value;
     },
     set(newValue) {
@@ -20,6 +24,7 @@ export function defineReactive(data, key, value) {
       console.log('设置数据');
       observe(newValue); // 如果新设置的值是一个对象， 应该添加监测
       value = newValue;
+      dep.notify();
     }
   });
 }

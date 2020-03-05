@@ -47,7 +47,7 @@ function initData(vm) {
     proxy(vm, '_data', key); // 将对vm上的取值、赋值操作代理到 vm._data 属性上
   }
 
-  observe(vm._data); // 观察数据
+  observe(data); // 观察数据
 }
 
 /**
