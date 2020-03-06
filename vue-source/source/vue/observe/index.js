@@ -64,14 +64,18 @@ function initComputed() {
  * 初始化watch
  */
 
-function createWatcher(vm, key, handler) {
-  return vm.$watch(key, handler);
+function createWatcher(vm, key, handler, opts) {
+  return vm.$watch(key, handler, opts);
 }
 
 function initWatch(vm) {
   let watch = vm.$options.watch; // 获取用户传入的watch属性
   for(let key in watch) {
-    let handler = watch[key];
-    createWatcher(vm, key, handler);
+    let userDefined = watch[key];
+    let handler = userDefined;
+    if (userDefined.handler) {
+      handler = userDefined.handler;
+    }
+    createWatcher(vm, key, handler, {immediate: userDefined.immediate});
   }
 }

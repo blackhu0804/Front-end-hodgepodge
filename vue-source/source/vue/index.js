@@ -66,10 +66,10 @@ Vue.prototype.$mount = function() {
   // 如果数据更新了， 需要重新更新视图 --> 依赖收集
 }
 
-Vue.prototype.$watch = function(expr, handler) {
+Vue.prototype.$watch = function(expr, handler, opts) {
   // 创建一个watcher
   let vm = this;
-  new Watcher(vm, expr, handler, {user: true}); // 用户自己定义的watcher
+  new Watcher(vm, expr, handler, {user: true, ...opts}); // 用户自己定义的watcher
 }
 
 export default Vue

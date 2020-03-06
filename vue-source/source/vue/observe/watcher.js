@@ -28,8 +28,12 @@ class Watcher { // 每次产生一个watch 都会有一个唯一的标识
     this.depsId = new Set();
     this.opts = opts;
     this.id = id++;
+    this.immediate = opts.immediate;
     // 创建watcher的时候 ，先将表达式对应的值取出来
     this.value = this.get();
+    if (this.immediate) {
+      this.cb(this.value);
+    }
   }
 
   get() {
