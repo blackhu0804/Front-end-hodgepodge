@@ -9,11 +9,15 @@ let vm = new Vue({
         name: 'black',
         age: 18
       },
-      arr: [[1], 2, 3]
+      arr: [[1], 2, 3],
+      firstName: 'hello',
+      lastName: 'black'
     }
   },
   computed: {
-
+    fullName() {
+      return this.firstName + this.lastName;
+    }
   },
   watch: {
     msg: {
@@ -35,5 +39,6 @@ setTimeout(() => {
   // vm.arr[0].push(4);
 
   // --------
-  vm.msg = 'world'
+  // vm.msg = 'world'
+  vm.firstName = 'xxx';
 }, 0)

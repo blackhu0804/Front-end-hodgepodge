@@ -1,4 +1,6 @@
 import Observer from './observer';
+import Watcher from './watcher';
+import Dep from './dep';
 
 export function initState(vm) {
   let opts = vm.$options;
@@ -6,7 +8,7 @@ export function initState(vm) {
     initData(vm);
   }
   if (opts.computed) {
-    initComputed();
+    initComputed(vm, opts.computed);
   }
   if (opts.watch) {
     initWatch(vm);
@@ -56,8 +58,34 @@ function initData(vm) {
 /**
  * 初始化计算属性
  */
-function initComputed() {
+function createComputedGetter(vm, key) {
+  let watcher = vm._watchersComputed[key];
+  // 用户取computed值时，调用该方法
+  return function() {
+    if (watcher) {
+      // 如果dirty为false， 不需要重新执行计算属性中的方法
+      if (watcher.dirty) {
+        watcher.evaluate();
+      }
+      if (Dep.target) { // watcher 就是计算属性watcher dep = [firstName.dep, lastName.dep]
+        watcher.depend();
+      }
+      return watcher.value;
+    }
+  }
+}
 
+function initComputed(vm, computed) {
+  // 将计算属性的配置 放到vm上
+  let watchers = vm._watchersComputed = Object.create(null); // 创建一个存储计算属性的对象
+  for(let key in computed) {
+    let userDef = computed[key];
+    watchers[key] = new Watcher(vm, userDef, () => {}, {lazy: true}); // lazy: true 标识计算属性watcher 默认刚开始这个方法不会执行
+
+    Object.defineProperty(vm, key, {
+      get: createComputedGetter(vm, key)
+    })
+  }
 }
 
 /**

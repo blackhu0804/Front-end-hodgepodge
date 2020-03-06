@@ -23,6 +23,8 @@ class Watcher { // 每次产生一个watch 都会有一个唯一的标识
     if(opts.user) { // 标识是用户自己定义的watcher
       this.user = true;
     }
+    this.lazy = opts.lazy; // 为true 说明为计算属性
+    this.dirty = this.lazy;
     this.cb = cb;
     this.deps = [];
     this.depsId = new Set();
@@ -30,7 +32,8 @@ class Watcher { // 每次产生一个watch 都会有一个唯一的标识
     this.id = id++;
     this.immediate = opts.immediate;
     // 创建watcher的时候 ，先将表达式对应的值取出来
-    this.value = this.get();
+    // 如果为计算属性的话， 不会默认调用get方法
+    this.value = this.lazy ? undefined : this.get();
     if (this.immediate) {
       this.cb(this.value);
     }
@@ -39,9 +42,14 @@ class Watcher { // 每次产生一个watch 都会有一个唯一的标识
   get() {
     pushTarget(this); // 渲染watcher 将Dep.target = watcher
     // 默认创建watcher 会执行此方法
-    let value = this.getter(); // 让传入的函数执行
+    let value = this.getter.call(this.vm); // 让传入的函数执行
     popTarget();
     return value;
+  }
+
+  evaluate() {
+    this.value = this.get();
+    this.dirty = false;
   }
 
   addDep(dep) { // 同一个 wathcer 不应该重复记录 dep 让 wathcer 和 dep 互相记忆
@@ -53,8 +61,19 @@ class Watcher { // 每次产生一个watch 都会有一个唯一的标识
     }
   }
 
+  depend() {
+    let i = this.deps.length;
+    while(i--) {
+      this.deps[i].depend();
+    }
+  }
+
   update() {
-    queueWatcher(this);
+    if (this.lazy) { // 如果是计算属性
+      this.dirty = true;  // 计算属性的值发生变化了，取值时需要重新计算
+    } else {
+      queueWatcher(this);
+    }
   }
 
   run() {
