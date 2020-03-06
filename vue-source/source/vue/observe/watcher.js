@@ -1,5 +1,6 @@
 let id = 0;
 import {pushTarget, popTarget} from './dep';
+import {util} from '../util';
 
 class Watcher { // 每次产生一个watch 都会有一个唯一的标识
   /**
@@ -14,21 +15,29 @@ class Watcher { // 每次产生一个watch 都会有一个唯一的标识
     this.exprOrFn = exprOrFn;
     if (typeof exprOrFn === 'function') {
       this.getter = exprOrFn;
+    } else {
+      this.getter = function () {
+        return util.getValue(vm, exprOrFn);
+      }
+    }
+    if(opts.user) { // 标识是用户自己定义的watcher
+      this.user = true;
     }
     this.cb = cb;
     this.deps = [];
     this.depsId = new Set();
     this.opts = opts;
     this.id = id++;
-
-    this.get();
+    // 创建watcher的时候 ，先将表达式对应的值取出来
+    this.value = this.get();
   }
 
   get() {
     pushTarget(this); // 渲染watcher 将Dep.target = watcher
     // 默认创建watcher 会执行此方法
-    this.getter(); // 让传入的函数执行
+    let value = this.getter(); // 让传入的函数执行
     popTarget();
+    return value;
   }
 
   addDep(dep) { // 同一个 wathcer 不应该重复记录 dep 让 wathcer 和 dep 互相记忆
@@ -45,7 +54,10 @@ class Watcher { // 每次产生一个watch 都会有一个唯一的标识
   }
 
   run() {
-    this.get();
+    let value = this.get();
+    if (this.value !== value) {
+      this.cb(value, this.value);
+    }
   }
 }
 

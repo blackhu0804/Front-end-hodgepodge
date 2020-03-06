@@ -16,7 +16,9 @@ let vm = new Vue({
 
   },
   watch: {
-
+    msg(newValue, oldValue) {
+      console.log(newValue, oldValue);
+    }
   }
 });
 
@@ -27,6 +29,8 @@ let vm = new Vue({
 // console.log(vm.arr[0].a = 100);
 
 setTimeout(() => {
-  vm.arr[0].push(4);
-  console.log(vm);
+  // vm.arr[0].push(4);
+
+  // --------
+  vm.msg = 'world'
 }, 0)
