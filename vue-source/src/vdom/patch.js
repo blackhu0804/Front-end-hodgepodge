@@ -30,7 +30,7 @@ function createEle(vnode) {
  * @param {*} oldProps 
  */
 function updateProperties(vnode, oldProps = {}) {
-  let newProps = vnode.props; // 获取当前老节点中的属性
+  let newProps = vnode.props || {}; // 获取当前老节点中的属性
   let el = vnode.el; // 当前的真实节点
 
   let newStyle = newProps.style || {};
@@ -58,6 +58,93 @@ function updateProperties(vnode, oldProps = {}) {
       el.className = newProps.class;
     } else {
       el[key] = newProps[key];
+    }
+  }
+}
+
+/**
+ * node 比对
+ * 
+ */
+export function patch(oldVnode, newVnode) {
+  // 1） 先比对标签
+  if (oldVnode.tag !== newVnode.tag) {
+    oldVnode.el.parentNode.replaceChild(createEle(newVnode), oldVnode.el);
+  }
+  // 2) 比对文本 标签一样
+  if (!oldVnode.tag) {
+    if (oldVnode.text !== newVnode.text) { // 内容不一致直接根据当前新的元素中的内容来替换掉文本节点
+      newVnode.el.textContent = newVnode.text;
+    }
+  }
+  // 3) 标签一样属性不一样
+  let el = newVnode.el =  oldVnode.el;
+  updateProperties(newVnode, oldVnode.props); // 更新属性
+
+  // 4) 比较孩子
+  let oldChildren = oldVnode.children || [];
+  let newChildren = newVnode.children || [];
+
+  if (oldChildren.length > 0 && newChildren.length > 0) {
+    updateChildren(el, oldChildren, newChildren);
+  } else if (oldChildren.length > 0) {
+    el.innerHTML = '';
+  } else if (newChildren.length > 0) {
+    for (let i = 0; i < newChildren.length; i++) {
+      let child = newChildren[i];
+      el.appendChild(createEle(child));
+    }
+  }
+}
+
+/**
+ * 判断两个节点是否一样
+ */
+function isSameVnode(oldVnode, newVnode) {
+  return (oldVnode.tag === newVnode.tag) && (oldVnode.key === newVnode.key);
+}
+
+function updateChildren(parent, oldChildren, newChildren) {
+  let oldStartIndex = 0;
+  let oldStartVnode = oldChildren[0];
+  let oldEndIndex = oldChildren.length - 1;
+  let oldEndVnode = oldChildren[oldEndIndex];
+
+  let newStartIndex = 0;
+  let newStartVnode = newChildren[0];
+  let newEndIndex = newChildren.length - 1;
+  let newEndVnode = newChildren[newEndIndex];
+  while(oldStartIndex <= oldEndIndex && newStartIndex <= newEndIndex) {
+    if (isSameVnode(oldStartVnode, newStartVnode)) { // 从头开始比较
+      patch(oldStartVnode, newStartVnode);
+      oldStartVnode = oldChildren[++oldStartIndex];
+      newStartVnode = newChildren[++newStartIndex];
+    } else if (isSameVnode(oldEndVnode, newEndVnode)) { // 从尾开始比较
+      patch(oldEndVnode, newEndVnode);
+      oldEndVnode = oldChildren[--oldEndIndex];
+      newEndVnode = newChildren[--newEndIndex];
+    } else if (isSameVnode(oldStartVnode, newEndVnode)) { // 倒序
+      patch(oldStartVnode, newEndVnode);
+      parent.insertBefore(oldStartVnode.el, oldEndVnode.el.nextSibling);
+      oldStartVnode = oldChildren[oldStartIndex++];
+      newEndVnode = newChildren[newEndIndex--];
+    } else if (isSameVnode(oldEndVnode, newStartVnode)) { // 将尾部插入到前面
+      patch(oldEndVnode, newStartVnode);
+      parent.insertBefore(oldEndVnode.el, oldStartVnode.el);
+      oldEndVnode = oldChildren[--oldEndIndex];
+      newStartVnode = newChildren[++newStartIndex];
+    } else {
+      // TODO: 两个列表乱序 并且不复用
+    }
+  }
+
+  // 新的节点元素比老的节点多
+  if (newStartIndex <= newEndIndex) { 
+    // 比对以后新的节点还剩余，将剩余节点插入
+    for (let i = newStartIndex; i <= newEndIndex; i++) {
+      let ele = newChildren[newEndIndex + 1] == null ? null : newChildren[newEndIndex + 1].el;
+      parent.insertBefore(createEle(newChildren[i]),ele)
+      // parent.appendChild(createEle(newChildren[i]));
     }
   }
 }
