@@ -114,8 +114,22 @@ function updateChildren(parent, oldChildren, newChildren) {
   let newStartVnode = newChildren[0];
   let newEndIndex = newChildren.length - 1;
   let newEndVnode = newChildren[newEndIndex];
+
+  function makeIndexByKey (children) {
+    let map = {};
+    children.forEach((item, index) => {
+      map[item.key] = index;
+    })
+    return map;
+  }
+
+  let map = makeIndexByKey(oldChildren);
   while(oldStartIndex <= oldEndIndex && newStartIndex <= newEndIndex) {
-    if (isSameVnode(oldStartVnode, newStartVnode)) { // 从头开始比较
+    if (!oldStartVnode) {
+      oldStartVnode = oldChildren[++oldStartIndex];
+    } else if (!oldEndVnode) {
+      oldEndVnode = oldChildren[--oldEndIndex];
+    } else if (isSameVnode(oldStartVnode, newStartVnode)) { // 从头开始比较
       patch(oldStartVnode, newStartVnode);
       oldStartVnode = oldChildren[++oldStartIndex];
       newStartVnode = newChildren[++newStartIndex];
@@ -134,7 +148,19 @@ function updateChildren(parent, oldChildren, newChildren) {
       oldEndVnode = oldChildren[--oldEndIndex];
       newStartVnode = newChildren[++newStartIndex];
     } else {
-      // TODO: 两个列表乱序 并且不复用
+      // 两个列表乱序 并且不复用
+      // 先拿新节点的第一项 去老节点中匹配， 匹配不到直接将这个节点插入到老节点的开头，如果能查到直接移动老节点
+      let moveIndex = map[newStartVnode.key];
+      if (moveIndex == undefined) {
+        parent.insertBefore(createEle(newStartVnode), oldStartVnode.el);
+      } else {
+        // 移动老元素的位置
+        let moveVnode = oldChildren[moveIndex];
+        parent.insertBefore(moveVnode.el, oldStartVnode.el);
+        patch(moveVnode, newStartVnode);
+        oldChildren[moveIndex] = undefined;
+      }
+      newStartVnode = newChildren[++newStartIndex];
     }
   }
 
@@ -145,6 +171,15 @@ function updateChildren(parent, oldChildren, newChildren) {
       let ele = newChildren[newEndIndex + 1] == null ? null : newChildren[newEndIndex + 1].el;
       parent.insertBefore(createEle(newChildren[i]),ele)
       // parent.appendChild(createEle(newChildren[i]));
+    }
+  }
+
+  if (oldStartIndex <= oldEndIndex) {
+    for (let i = oldStartIndex; i <= oldEndIndex; i++) {
+      let child = oldChildren[i];
+      if (child != undefined) {
+        parent.removeChild(child.el);
+      }
     }
   }
 }

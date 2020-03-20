@@ -14,13 +14,13 @@ let oldVnode = h('div', {id: 'container'},
 render(oldVnode, container);
 
 let newVnode = h('div', {id: 'a', key: 1},
-  // h('li', {key: 'e', style: {background: 'red'}}, 'e'),
-  // h('li', {key: 'f', style: {background: 'yellow'}}, 'f'),
-  h('li', {key: 'd', style: {background: 'blue'}}, 'd'),
+  h('li', {key: 'e', style: {background: 'red'}}, 'e'),
+  h('li', {key: 'f', style: {background: 'yellow'}}, 'f'),
+  // h('li', {key: 'd', style: {background: 'blue'}}, 'd'),
   h('li', {key: 'a', style: {background: 'red'}}, 'a'),
   h('li', {key: 'b', style: {background: 'yellow'}}, 'b'),
   h('li', {key: 'c', style: {background: 'grey'}}, 'c'),
-  // h('li', {key: 'e', style: {background: 'pink'}}, 'e'),
+  h('li', {key: 'e', style: {background: 'pink'}}, 'e'),
 );
 
 setTimeout(() => {
