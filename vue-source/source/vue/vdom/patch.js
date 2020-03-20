@@ -1,6 +1,7 @@
 export function render(vnode, container) {
   let el = createEle(vnode);
   container.appendChild(el);
+  return el;
 }
 
 
@@ -74,7 +75,7 @@ export function patch(oldVnode, newVnode) {
   // 2) 比对文本 标签一样
   if (!oldVnode.tag) {
     if (oldVnode.text !== newVnode.text) { // 内容不一致直接根据当前新的元素中的内容来替换掉文本节点
-      newVnode.el.textContent = newVnode.text;
+      oldVnode.el.textContent = newVnode.text;
     }
   }
   // 3) 标签一样属性不一样
@@ -95,6 +96,8 @@ export function patch(oldVnode, newVnode) {
       el.appendChild(createEle(child));
     }
   }
+
+  return el;
 }
 
 /**
@@ -182,4 +185,6 @@ function updateChildren(parent, oldChildren, newChildren) {
       }
     }
   }
+
+  // 不要使用索引做为key，否则可能会导致重新渲染，采用不同的key移动元素位置就可以满足
 }
