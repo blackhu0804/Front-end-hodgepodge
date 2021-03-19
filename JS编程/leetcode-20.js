@@ -1,25 +1,19 @@
-/**
- * @param {string} s
- * @return {boolean}
- */
 var isValid = function(s) {
-  if (s === '') return true;
+  let stack = [];
 
-  const maps = {
-    '(': ')',
-    '[': ']',
-    '{': '}'
+  let map = {
+    '{' : '}',
+    '[' : ']',
+    '(' : ')'
   }
 
-  let arr = [];
   for (let i = 0; i < s.length; i++) {
-    if (Object.keys(maps).includes(s[i])) {
-      arr.push(s[i]);
-    } else if (maps[arr.pop()] !== s[i]) {
-      return false
+    if (Object.keys(map).includes(s[i])) {
+      stack.push(s[i]);
+    } else if (map[stack.pop()] !== s[i]){
+      return false;
     }
   }
-  if (arr.length === 0) return true;
-  return false;
+
+  return stack.length === 0;
 };
-console.log(isValid('('));
