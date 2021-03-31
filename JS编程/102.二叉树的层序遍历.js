@@ -16,20 +16,48 @@
  * @param {TreeNode} root
  * @return {number[][]}
  */
+// var levelOrder = function(root) {
+//   const result = [];
+//   function traversal(root, depth) {
+//     if (root !== null) {
+//       if (!result[depth]) {
+//         result[depth] = [];
+//       }
+//       result[depth].push(root.val);
+//       traversal(root.left, depth + 1);
+//       traversal(root.right, depth + 1);
+//     }
+//   }
+//   traversal(root, 0);
+//   return result;
+// };
+
+// BFS
 var levelOrder = function(root) {
-  const result = [];
-  function traversal(root, depth) {
-    if (root !== null) {
-      if (!result[depth]) {
-        result[depth] = [];
+  if (root === null) return [];
+
+  let result = [];
+  let queue = [root];
+  while(queue) {
+    let arr = [];
+    let len = queue.length;
+    while(len) {
+      let node = queue.shift();
+      arr.push(node.val);
+
+      if (node.left) {
+        queue.push(node.left);
       }
-      result[depth].push(root.val);
-      traversal(root.left, depth + 1);
-      traversal(root.right, depth + 1);
-    }
-  }
-  traversal(root, 0);
+      if (node.right) {
+        queue.push(node.right);
+      }
+      len--;
+    };
+    result.push(arr);
+  };
+
   return result;
 };
+
 // @lc code=end
 
