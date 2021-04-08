@@ -17,13 +17,11 @@ var longestPalindrome = function(s) {
   return s.substring(start, start + len);
 };
 
-// 求以 l 为中心，s 的最长回文子串
 function getLen(s, l, r) {
-  while (l >= 0 && r < s.length && s[l] === s[r]) {
-    --l;
-    ++r;
+  while(l >= 0 && r < s.length && s[l] === s[r]) {
+    l--;
+    r++;
   }
+
   return r - l - 1;
 }
-
-console.log(longestPalindrome('cbbd'))

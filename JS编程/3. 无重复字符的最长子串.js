@@ -3,20 +3,22 @@
  * @return {number}
  */
 var lengthOfLongestSubstring = function(s) {
-  let arr = [];
-  let maxLength = 0;
+  if (s.length < 2) return s.length;
 
-  for (let i = 0; i < s.length; i++) {
-    let index = arr.indexOf(s[i]);
-    if (index >= 0) {
-      arr.splice(0, index + 1);
+  let left = 0;
+  let right = 0;
+  let maxLen = 0;
+  while (right <= s.length) {
+    let cur = s.substring(left, right);
+    maxLen = Math.max(maxLen, right - left);
+    if (cur.indexOf(s[right]) < 0) {
+      right++;
+    } else {
+      left++;
     }
-    arr.push(s[i]);
-
-    maxLength = Math.max(arr.length, maxLength);
   }
 
-  return maxLength; 
+  return maxLen;
 };
 
-console.log(lengthOfLongestSubstring('dvdf'))
+console.log(lengthOfLongestSubstring('au'))
