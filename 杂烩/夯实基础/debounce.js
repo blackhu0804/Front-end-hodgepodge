@@ -36,6 +36,18 @@ function debounce(fn, time, immediate) {
   return debounced;
 }
 
+function debounce1(fn, time) {
+  let timeout = null;
+
+  return function() {
+    if (timeout) clearTimeout(timeout);
+
+    timeout = setTimeout(() => {
+      fn.call(this, ...arguments);
+    }, time);
+  }
+}
+
 var count = 1;
 var container = document.getElementById('container');
 
@@ -43,6 +55,6 @@ function getUserAction() {
     container.innerHTML = count++;
 };
 
-const setUserAction = debounce(getUserAction, 1000, true);
+const setUserAction = debounce1(getUserAction, 1000, true);
 
 container.onmousemove = setUserAction;
