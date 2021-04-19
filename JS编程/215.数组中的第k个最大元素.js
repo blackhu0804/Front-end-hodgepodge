@@ -1,20 +1,27 @@
-/*
- * @lc app=leetcode.cn id=215 lang=javascript
- *
- * [215] 数组中的第K个最大元素
- */
-
-// @lc code=start
 /**
  * @param {number[]} nums
  * @param {number} k
  * @return {number}
  */
 var findKthLargest = function(nums, k) {
-  const res = nums.sort((a, b) => {
-    return b - a;
-  })[k - 1];
-  return res;
+  return quickSort(nums)[k-1];
 };
-// @lc code=end
 
+function quickSort(arr) {
+  if (arr.length <= 1) return arr;
+
+  let index = Math.floor(arr.length / 2);
+  let val = arr.splice(index, 1)[0];
+  let left = [];
+  let right = [];
+
+  for (let i = 0; i < arr.length; i++) {
+    if (arr[i] > val) {
+      left.push(arr[i]);
+    } else {
+      right.push(arr[i]);
+    }
+  }
+
+  return [...quickSort(left), val, ...quickSort(right)];
+}
