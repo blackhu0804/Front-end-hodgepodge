@@ -1,60 +1,59 @@
 /**
- * 
+ *
  * @param {*} fn Function
  * @param {*} time Number
  * @param {*} triggleNow Boolean
  */
 function debounce(fn, time, immediate) {
   let timeout = null;
-  
-  let debounced = function () {
+
+  let debounced = function() {
     let context = this;
     if (timeout) clearTimeout(timeout);
-    
+
     if (immediate) {
-    	let exec = !timeout;
-      
+      let exec = !timeout;
+
       timeout = setTimeout(() => {
-      	timeout = null;
+        timeout = null;
       }, time);
-      
+
       if (exec) {
-      	fn.apply(context, arguments);
+        fn.apply(context, arguments);
       }
     } else {
-    	timeout = setTimeout(() => {
+      timeout = setTimeout(() => {
         fn.apply(context, arguments);
       }, time);
     }
-  }
-  
+  };
+
   debounced.cancel = function() {
-		clearTimeout(timeout);
+    clearTimeout(timeout);
     timeout = null;
-  }
-  
+  };
+
   return debounced;
 }
 
-function debounce1(fn, time) {
-  let timeout = null;
-
+function debounce1(fn, delay) {
+  let timer;
   return function() {
-    if (timeout) clearTimeout(timeout);
+    if (timer) clearTimeout(timer);
 
-    timeout = setTimeout(() => {
-      fn.call(this, ...arguments);
-    }, time);
+    timer = setTimeout(() => {
+      fn.apply(this);
+    }, delay);
   }
 }
 
 var count = 1;
-var container = document.getElementById('container');
+var container = document.getElementById("container");
 
 function getUserAction() {
-    container.innerHTML = count++;
-};
+  container.innerHTML = count++;
+}
 
-const setUserAction = debounce1(getUserAction, 1000, true);
+const setUserAction = debounce1(getUserAction, 1000);
 
 container.onmousemove = setUserAction;

@@ -18,15 +18,22 @@ function throttle(fn, time) {
   }
 }
 
-function throttle1(fn, time) {
-  let flag = true;
 
+function throttle2(fn, time) {
+  let timeout = null;
+  let start = new Date().getTime();
   return function() {
-    if (!flag) return;
-    flag = false;
-    setTimeout(() => {
-      fn.call(this, ...arguments);
-    }, time);
+    let cur = new Date().getTime();
+    clearTimeout(timeout);
+
+    if (cur - start >= time) {
+      fn();
+      start = cur;
+    } else {
+      timeout = setTimeout(() => {
+        fn();
+      }, time)
+    }
   }
 }
 
@@ -34,9 +41,9 @@ var count = 1;
 var container = document.getElementById('container');
 
 function getUserAction() {
-    container.innerHTML = count++;
+  container.innerHTML = count++;
 };
 
-const setUserAction = throttle1(getUserAction, 1000);
+const setUserAction = throttle2(getUserAction, 1000);
 
 container.onmousemove = setUserAction;
