@@ -38,13 +38,13 @@ var levelOrder = function(root) {
 
   let result = [];
   let queue = [root];
-  while(queue) {
+  while(queue.length) {
     let arr = [];
     let len = queue.length;
     while(len) {
       let node = queue.shift();
       arr.push(node.val);
-
+      
       if (node.left) {
         queue.push(node.left);
       }
@@ -58,6 +58,5 @@ var levelOrder = function(root) {
 
   return result;
 };
-
 // @lc code=end
 
