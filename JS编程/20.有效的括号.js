@@ -15,20 +15,16 @@ var isValid = function(s) {
     '[': ']',
     '{': '}'
   }
-  const arr = s.split('');
-  const res = [];
-  for (let i = 0; i < arr.length; i++) {
-    if (Object.keys(map).includes(arr[i])) {
-      res.push(arr[i]);
-    } else if (map[res.pop()] !== arr[i]){
+  let stack = [];
+  for (let i = 0; i < s.length; i++) {
+    if (Object.keys(map).includes(s[i])) {
+      stack.push(s[i]);
+    } else if (map[stack.pop()] !== s[i]) {
       return false;
     }
   }
-  if (res.length === 0) {
-    return true;
-  }
 
-  return false;
+  return stack.length === 0;
 };
 
 isValid('()');
