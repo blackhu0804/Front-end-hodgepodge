@@ -8,17 +8,18 @@ var generateParenthesis = function(n) {
 
   let result = [];
 
-  function dfs(str, left, right) {
-    if (str.length === 2*n) {
+  function dfs(str, leftNum, rightNum) {
+    if (str.length === n * 2) {
       result.push(str);
+      return;
     }
 
-    if (left < n) {
-      dfs(str+'(', left+1, right);
+    if (leftNum < n) {
+      dfs(str+'(', leftNum + 1, rightNum);
     }
 
-    if (right < left) {
-      dfs(str+')', left, right+1);
+    if (rightNum < leftNum) {
+      dfs(str+')', leftNum, rightNum + 1)
     }
   }
 
