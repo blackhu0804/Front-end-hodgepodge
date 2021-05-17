@@ -11,10 +11,10 @@ var rotate = function(matrix) {
     }
   }
 
-  let mid = Math.floor(n / 2);
+  let mid = Math.floor(n/2);
   for (let i = 0; i < n; i++) {
     for (let j = 0; j < mid; j++) {
-      [matrix[i][j], matrix[i][n - 1 -j]] = [matrix[i][n - 1 - j], matrix[i][j]];
+      [matrix[i][j], matrix[i][n-1-j]] = [matrix[i][n-1-j], matrix[i][j]]
     }
   }
 
