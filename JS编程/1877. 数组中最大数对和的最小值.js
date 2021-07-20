@@ -12,7 +12,7 @@ var minPairSum = function(nums) {
         result = Math.max(result, nums[i] + nums[nums.length - 1 - i]);
     }
 
-    return result; 
+    return result;
 };
 
 console.log(minPairSum([3,5,2,3]))
