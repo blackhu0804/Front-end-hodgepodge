@@ -43,3 +43,121 @@ JavaScript 这门语言的根本就是原型模式。在 Java 等强类型语言
 ### 6. 适配器模式
 
 参考 axios
+
+### 7. 代理模式
+
+> 在某些情况下，出于种种考虑、限制，一个对象不能直接访问另一个对象，需要一个第三者（代理）牵线搭桥从而间接达到访问目的，这样的模式就是代理模式。
+
+#### 前端常见的四种代理类型
+
+- 事件代理
+
+它的场景是一个父元素下有多个子元素，如下：
+
+```html
+<div id="father">
+  <a href="#">链接1号</a>
+  <a href="#">链接2号</a>
+  <a href="#">链接3号</a>
+  <a href="#">链接4号</a>
+  <a href="#">链接5号</a>
+  <a href="#">链接6号</a>
+</div>
+```
+
+实现点击每个 a 标签，都可以弹出标签里面的内容。这时，考虑到事件本身具有“冒泡”的特性，当我们点击 a 元素时，点击事件会冒泡到父元素上，从而被监听到。
+
+所以可以通过只在 div 元素上绑定一次即可，而不需要在子元素上被绑定 N 次 —— 这种做法就是事件代理。
+
+具体实现：
+
+```javascript
+const father = document.getElementById("father");
+
+father.addEventListener("click", (e) => {
+  if (e.target.tagName === "A") {
+    e.preventDefault();
+    alert(e.target.innerHTML);
+  }
+});
+```
+
+- 虚拟代理
+
+> 图片预加载，预加载主要是为了避免网络不好、或者图片太大时，页面长时间给用户留白的尴尬。常见的操作是先让这个 img 标签展示一个占位图，然后创建一个 Image 实例，让这个 Image 实例的 src 指向真实的目标图片地址、观察该 Image 实例的加载情况 —— 当其对应的真实图片加载完毕后，即已经有了该图片的缓存内容，再将 DOM 上的 img 元素的 src 指向真实的目标图片地址。
+
+预加载的代理实现：
+
+```javascript
+class PreLoadImg {
+  constructor(imgNode) {
+    // 获取真实的 DOM 节点
+    this.imgNode = imgNode;
+  }
+  // 操作 img 节点的 src 属性
+  setSrc(imgUrl) {
+    this.imgSrc.src = imgUrl;
+  }
+}
+
+class ProxyImage {
+  static LOADING_URL = "xxxx";
+
+  constructor(targetImage) {
+    this.targetImage = targetImage;
+  }
+
+  // 操作虚拟 Image， 完成加载
+  setSrc(targetUrl) {
+    this.targetImage.setSrc(ProxyImage.LOADING_URL);
+    const virtualImage = new Image();
+    // 监听目标图片加载的情况，完成时再将DOM上的真实img节点的src属性设置为目标图片的url
+    virtualImage.onload = () => {
+      this.targetImage.setSrc(targetUrl);
+    };
+    // 设置 src 属性，虚拟 Image 实例开始加载图片
+    virtualImage.src = targetUrl;
+  }
+}
+```
+
+- 缓存代理
+
+缓存代理常应用于一些计算量较大的场景里。在这种场景下，我们需要 “用时间换空间” —— 当我们需要用到某个已经计算过得值得时候，不想耗时进行二次计算，而是希望从缓存中去取现成的计算结果。这个时候就需要一个代理在帮我们进行计算的同时，进行计算结果的缓存。
+
+简单实现，对传入的参数进行求和。
+
+```javascript
+const addAll = function () {
+  console.log("进行了一次新计算");
+  let result = 0;
+  const len = arguments.length;
+  for (let i = 0; i < len; i++) {
+    result += arguments[i];
+  }
+  return result;
+};
+
+// 为求和方法创建代理
+cosnt proxyAddAll = (function() {
+    const resultCache = {};
+    return function() {
+        const args = Array.prototype.join.call(arguments, '');
+
+        if (args in resultCache) {
+            return resultCache[args];
+        }
+        return resultCache[args] = addAll(...arguments);
+    }
+})()
+
+proxyAddAll(1, 2, 3);
+// 进行了一次新计算
+// 6
+proxyAddAll(1, 2, 3); // 第二次从 resultCache 中直接取出结果
+// 6
+```
+
+- 保护代理
+
+在 Vue 源码中有些变量会通过 Proxy 代理的方式暴露给用户，并不想让用户直接访问该变量。这种方式就是保护代理的实现。
