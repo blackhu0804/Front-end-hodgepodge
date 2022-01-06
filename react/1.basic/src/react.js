@@ -1,4 +1,5 @@
 import { wrapToVdom } from './utils';
+import { Component } from './component';
 
 function createElement(type, config, children) {
     let props = {...config};
@@ -26,7 +27,8 @@ function createElement(type, config, children) {
 }
 
 const React = {
-    createElement
+    createElement,
+    Component
 }
 
 export default React;

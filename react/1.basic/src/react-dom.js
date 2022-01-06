@@ -12,7 +12,13 @@ function createDOM(vdom) {
     let dom;
     if (type === "REACT_TEXT") {
         dom = document.createTextNode(props.content);
-    } else {
+    } else if (typeof type === 'function') {
+        if (type.isReactComponent) { // 类组件
+            return mountClassComponent(vdom)
+        } else {
+            return mountFunctionComponent(vdom);
+        }
+    } else if (typeof type === 'string') {
         dom = document.createElement(type);
     }
     if (props) {
@@ -28,6 +34,19 @@ function createDOM(vdom) {
 
     vdom.dom = dom;
     return dom;
+}
+
+function mountClassComponent(vdom) {
+    let {type: ClassComponent, props} = vdom;
+    let classInstance = new ClassComponent(props); // 创建类组件实例
+    let renderVdom = classInstance.render();
+    return createDOM(renderVdom);
+}
+
+function mountFunctionComponent(vdom) {
+    let { type: functionComponent , props } = vdom;
+    const renderVdom = functionComponent(props); // 获取组件将要渲染的 vdom
+    return createDOM(renderVdom);
 }
 
 function reconcileChildren(children, parentDom) {
