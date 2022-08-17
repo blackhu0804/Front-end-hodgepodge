@@ -1,28 +1,17 @@
-const webpack = require('webpack');
+const webpack = require("webpack");
 
-const compiler = webpack([
-    {
-        entry: './index.js',
-        mode: 'production',
-        output: {
-            filename: 'main.production.js'
-        }
+function f1() {
+  return webpack({
+    entry: "./index.js",
+    mode: "none",
+    output: {
+      iife: false,
+      pathinfo: "verbose",
     },
-    {
-        entry: './index.js',
-        mode: 'development',
-        output: {
-            filename: 'main.development.js'
-        }
-    },
-    {
-        entry: './index.js',
-        output: {
-            filename: 'main.unknown.js'
-        }
-    }
-])
+  });
+}
 
-compiler.run((err, stat) => {
-    console.log(stat.toJson())
-})
+f1().run((err, stat) => {
+  console.log("构建时间：", stat.toJson().time);
+  console.log("构建时间：", stat.endTime - stat.startTime);
+});
