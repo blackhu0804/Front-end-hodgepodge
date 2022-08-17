@@ -1,3 +1,3 @@
-const { sum } = require("./sum");
+const sum = require("./sum");
 
-sum(1, 2);
+console.log(sum(1, 2));
