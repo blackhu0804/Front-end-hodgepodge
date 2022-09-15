@@ -14,7 +14,19 @@ function f1() {
   });
 }
 
-f1().run((err, stat) => {
+function f2() {
+  return webpack({
+    entry: "./prefetch.index.js",
+    mode: "none",
+    output: {
+      filename: "[name].[contenthash].js",
+      chunkFilename: "[name].[id].chunk.[contenthash].js",
+      path: path.resolve(__dirname, "dist/prefetch"),
+    },
+  });
+}
+
+f2().run((err, stat) => {
   console.log("构建时间：", stat.toJson().time);
   console.log("构建时间：", stat.endTime - stat.startTime);
 });
