@@ -26,7 +26,17 @@ function f2() {
   });
 }
 
-f2().run((err, stat) => {
-  console.log("构建时间：", stat.toJson().time);
-  console.log("构建时间：", stat.endTime - stat.startTime);
-});
+// f2().run((err, stat) => {
+//   console.log("构建时间：", stat.toJson().time);
+//   console.log("构建时间：", stat.endTime - stat.startTime);
+// });
+
+const webpack = require('webpack')
+
+webpack({
+  entry: './index.js',
+  mode: 'none',
+}).run((err, stat) => {
+  console.log(JSON.stringify(stat.toJson(), null, 2))
+})
+```
